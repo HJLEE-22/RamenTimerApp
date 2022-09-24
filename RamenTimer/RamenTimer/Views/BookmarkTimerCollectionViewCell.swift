@@ -19,7 +19,7 @@ class BookmarkTimerCollectionViewCell: UICollectionViewCell {
             if isSelected {
                 imageView.contentMode = .center
             } else {
-                imageView.contentMode = .scaleToFill
+                imageView.contentMode = .scaleAspectFit
             }
         }
     }

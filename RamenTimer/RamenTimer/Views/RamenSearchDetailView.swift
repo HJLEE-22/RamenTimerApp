@@ -68,7 +68,7 @@ class RamenSearchDetailView: UIView {
     
     lazy var playButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         button.backgroundColor = .clear
         button.imageView?.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .fill
@@ -104,20 +104,22 @@ class RamenSearchDetailView: UIView {
         return label
     }()
     
-    lazy var cellRatingStarLabel: UILabel = {
+    lazy var cellSuggestedWaterLabel: UILabel = {
         let label = UILabel()
-        label.text = "별점 : "
+        label.text = "권장물양 : "
         label.backgroundColor = .clear
         label.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
 //        label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
+
         label.frame.size.width = 30
         return label
     }()
     
-    lazy var ratingStarLabel: UILabel = {
+    lazy var suggestedWaterLabel: UILabel = {
         let label = UILabel()
-        label.text = "⭐️⭐️⭐️⭐️⭐️"
+        label.text = "500 ml"
         label.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
+        label.textAlignment = .right
 //        label.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
 
         return label
@@ -136,7 +138,7 @@ class RamenSearchDetailView: UIView {
     }()
     
     lazy var secondLabelStackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [cellRatingStarLabel, ratingStarLabel])
+       let stackView = UIStackView(arrangedSubviews: [cellSuggestedWaterLabel, suggestedWaterLabel])
         stackView.spacing = 10
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -184,15 +186,7 @@ class RamenSearchDetailView: UIView {
     }()
     
 
-    
-//    lazy var scrollView: UIScrollView = {
-//        let scrollView = UIScrollView()
-//        scrollView.backgroundColor = .clear
-//        scrollView.showsVerticalScrollIndicator = true
-//        scrollView.contentSize = CGSize(width: 100, height: 700)
-//        scrollView.backgroundColor = .white
-//        return scrollView
-//    }()
+
     
     
     // MARK: - init 생성
@@ -213,12 +207,9 @@ class RamenSearchDetailView: UIView {
     
     func makeUI() {
         self.addSubview(mainStackView)
-//        self.addSubview(scrollView)
-//        scrollView.addSubview(mainStackView)
         self.addSubview(clearTextField)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         clearTextField.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
@@ -228,8 +219,8 @@ class RamenSearchDetailView: UIView {
         timeSlider.translatesAutoresizingMaskIntoConstraints = false
         cellSugestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         suggestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellRatingStarLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingStarLabel.translatesAutoresizingMaskIntoConstraints = false
+        cellSuggestedWaterLabel.translatesAutoresizingMaskIntoConstraints = false
+        suggestedWaterLabel.translatesAutoresizingMaskIntoConstraints = false
         firstLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         secondLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         totalLabelStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -238,20 +229,6 @@ class RamenSearchDetailView: UIView {
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            
-//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            scrollView.topAnchor.constraint(equalTo: topAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            
-            
-//            mainStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-//
-//            mainStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 0),
-//            mainStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
-//            mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
-//            mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -276,7 +253,6 @@ class RamenSearchDetailView: UIView {
             clearTextField.trailingAnchor.constraint(equalTo: timeLabel.trailingAnchor),
             
 
-//            playButton.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 100),
             stackViewForButton.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             stackViewForButton.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
             stackViewForButton.heightAnchor.constraint(equalToConstant: 80),
@@ -306,15 +282,6 @@ class RamenSearchDetailView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.endEditing(true)
     }
-    
-//    override func updateConstraints() {
-//        myButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5).isActive = true
-//        myButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
-//        myButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        myButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//
-//        super.updateConstraints()
-//    }
     
     
     

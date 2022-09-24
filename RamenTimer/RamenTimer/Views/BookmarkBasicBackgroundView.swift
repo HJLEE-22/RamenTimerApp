@@ -19,7 +19,7 @@ class BookmarkBasicBackgroundView: UIView {
     
     lazy var ramenImageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.image = UIImage(named: "ramenRepresentationImage")
+        imageView.image = UIImage(named: ImageNames.ramenImage)
         return imageView
     }()
     

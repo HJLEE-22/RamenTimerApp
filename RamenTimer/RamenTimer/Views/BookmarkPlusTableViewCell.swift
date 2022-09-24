@@ -22,7 +22,7 @@ class BookmarkPlusTableViewCell: UITableViewCell {
     
     lazy var bookmarkButton: UIButton = {
        let button = UIButton()
-        button.setImage(UIImage(systemName: "star"), for: .normal)
+        button.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
 //        button.setImage(UIImage(systemName: "star.fill"), for: .selected)
         return button
         
@@ -30,7 +30,7 @@ class BookmarkPlusTableViewCell: UITableViewCell {
 
     lazy var lineImage: UIImageView = {
         let imageview = UIImageView()
-        imageview.image = UIImage(systemName: "line.3.horizontal")
+        imageview.image = UIImage(systemName: ImageSystemNames.lineThreeHorizontal)
         imageview.scalesLargeContentImage = false
         imageview.contentMode = .scaleAspectFit
         return imageview
@@ -50,39 +50,19 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         return label
     }()
 
-    lazy var cellRatingLabel: UILabel = {
+    lazy var cellTimeLabel: UILabel = {
         let label = UILabel()
-        label.text = "별점 : "
+        label.text = "시간 : "
 
         return label
     }()
     
-    lazy var ratingLabel: UILabel = {
+    lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "⭐️⭐️⭐️"
+        label.text = "05:00"
         return label
     }()
 
-    lazy var cellSettingTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "설정시간 : "
-        return label
-    }()
-    lazy var settingTimeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
-
-    lazy var cellSuggestingTimeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "권장시간 : "
-        return label
-    }()
-    
-    lazy var suggestingTimeLabel: UILabel = {
-        let label = UILabel()
-        return label
-    }()
 
     lazy var mainStackView: UIStackView = {
        let sv = UIStackView(arrangedSubviews: [bookmarkButton, ramenImage, SubStackView, lineImage])
@@ -115,8 +95,8 @@ class BookmarkPlusTableViewCell: UITableViewCell {
     
     lazy var ratingSubStackView: UIStackView = {
         let sv = UIStackView()
-        sv.addArrangedSubview(cellRatingLabel)
-        sv.addArrangedSubview(ratingLabel)
+        sv.addArrangedSubview(cellTimeLabel)
+        sv.addArrangedSubview(timeLabel)
         sv.axis = .horizontal
         sv.alignment = .leading
         sv.distribution = .fill
@@ -146,7 +126,11 @@ class BookmarkPlusTableViewCell: UITableViewCell {
     
     @objc func bookmarkButtonTapped2() {
         cellDelegate?.bookmarkButtonTapped()
-        
+        if bookmarkButton.image(for: .normal) == UIImage(systemName: ImageSystemNames.star) {
+            bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.starFill), for: .normal)
+        } else {
+            bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
+        }
     }
     
     override func awakeFromNib() {
@@ -157,11 +141,12 @@ class BookmarkPlusTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+ 
     }
     
     func configureUI() {
-        self.addSubview(mainStackView)
+        // 테이블뷰에 코드로 ui 작성할 때 contentView 위에다가 놓기.
+        contentView.addSubview(mainStackView)
         
         lineImage.translatesAutoresizingMaskIntoConstraints = false
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
@@ -171,18 +156,15 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         ratingSubStackView.translatesAutoresizingMaskIntoConstraints = false
         cellRamenTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         ramenTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellRatingLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellSettingTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        settingTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellSuggestingTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        suggestingTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        cellTimeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+
         
         SubStackView.setContentHuggingPriority(.init(rawValue: 249), for: .horizontal)
  
         cellRamenTitleLabel.setContentHuggingPriority(.init(rawValue: 252), for: .horizontal)
         
-        cellRatingLabel.setContentHuggingPriority(.init(rawValue: 252), for: .horizontal)
+        cellTimeLabel.setContentHuggingPriority(.init(rawValue: 252), for: .horizontal)
         
         bookmarkButton.setContentHuggingPriority(.init(rawValue: 251), for: .horizontal)
         
@@ -190,21 +172,17 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
 //            mainStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 15),
-            mainStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15 ),
-            mainStackView.topAnchor.constraint(equalTo: self.topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            
-//            SubStackView.centerYAnchor.constraint(equalTo: mainStackView.centerYAnchor) ,
-
+            mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15 ),
+            mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             ramenImage.widthAnchor.constraint(equalToConstant: 100),
             ramenImage.heightAnchor.constraint(equalToConstant: 100),
-//
             
             lineImage.widthAnchor.constraint(equalToConstant: 30),
 
-//
+
             
             
         ])

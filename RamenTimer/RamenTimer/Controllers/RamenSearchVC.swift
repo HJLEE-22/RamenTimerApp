@@ -98,7 +98,7 @@ class RamenSearchVC: UIViewController {
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         
-        collectionView.register(RamenSearchCollectionViewCell.self, forCellWithReuseIdentifier: "RamenSearchCellID")
+        collectionView.register(RamenSearchCollectionViewCell.self, forCellWithReuseIdentifier: cellID.forRamenSearchView)
     }
 
     func setupCollectionViewConstraints() {
@@ -203,7 +203,7 @@ extension RamenSearchVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RamenSearchCellID", for: indexPath) as! RamenSearchCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID.forRamenSearchView, for: indexPath) as! RamenSearchCollectionViewCell
         if !isFiltering {
             cell.imageView.image = ramensDataManager.getRamenArray()[indexPath.row].image
             

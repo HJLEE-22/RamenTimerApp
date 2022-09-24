@@ -44,7 +44,7 @@ class RamenSearchDetailVC: UIViewController {
         setupTimerLabel()
         setupTimeSlider()
         setupPlayButtonForCellSelect()
-        setupRatingStar()
+        setupSuggestedWater()
         setupTimerTextView()
         showPickerView()
         
@@ -143,19 +143,19 @@ class RamenSearchDetailVC: UIViewController {
     
     func setupPlayButtonForCellSelect() {
         ramenSearchDetailVeiw.playButton.isEnabled = true
-        ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         
     }
     
     // 스타트버튼을 누르면 실행하는 함수 + 일시정지
     @objc func playButtonTapped() {
-        if ramenSearchDetailVeiw.playButton.image(for: .normal) == UIImage(systemName: "play.fill") {
+        if ramenSearchDetailVeiw.playButton.image(for: .normal) == UIImage(systemName: ImageSystemNames.play) {
             timer?.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countingTimer), userInfo: nil, repeats: true)
-            ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: ImageSystemNames.pause), for: .normal)
         } else {
             timer?.invalidate()
-            ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            ramenSearchDetailVeiw.playButton.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         }
     }
     
@@ -210,7 +210,7 @@ class RamenSearchDetailVC: UIViewController {
     }
     
     func configureTimerAlert() {
-        let url = Bundle.main.url(forResource: "alarm_sound", withExtension: "mp3")
+        let url = Bundle.main.url(forResource: AlarmSound.name, withExtension: AlarmSound.extention)
         player = try! AVAudioPlayer(contentsOf: url!)
         player.play()
         player.volume = 0.5
@@ -224,28 +224,9 @@ class RamenSearchDetailVC: UIViewController {
     }
     
     // MARK: - 별점 셋업
-    func setupRatingStar() {
-        guard let ramenData = ramenData else { return }
-        guard let ratingStar = ramenData.rating else { return }
-        switch ratingStar {
-        case .oneStar:
-            ramenSearchDetailVeiw.ratingStarLabel.text = "⭐️"
-            ramenSearchDetailVeiw.ratingStarLabel.textAlignment = .left
-        case .twoStar:
-            ramenSearchDetailVeiw.ratingStarLabel.text = "⭐️⭐️"
-            ramenSearchDetailVeiw.ratingStarLabel.textAlignment = .left
-
-        case .threeStar:
-            ramenSearchDetailVeiw.ratingStarLabel.text = "⭐️⭐️⭐️"
-            ramenSearchDetailVeiw.ratingStarLabel.textAlignment = .left
-
-        case .fourStar:
-            ramenSearchDetailVeiw.ratingStarLabel.text = "⭐️⭐️⭐️⭐️"
-            ramenSearchDetailVeiw.ratingStarLabel.textAlignment = .left
-
-        case .fiveStar:
-            ramenSearchDetailVeiw.ratingStarLabel.text = "⭐️⭐️⭐️⭐️⭐️"
-        }
+    func setupSuggestedWater() {
+        guard let ramenData = ramenData, let water = ramenData.water else { return }
+        ramenSearchDetailVeiw.suggestedWaterLabel.text = "\(water) ml"
     }
     
     // MARK: - 텍스트뷰 셋업

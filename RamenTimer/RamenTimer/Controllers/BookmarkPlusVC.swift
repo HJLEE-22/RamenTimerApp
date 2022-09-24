@@ -43,7 +43,7 @@ class BookmarkPlusVC: UIViewController  {
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(BookmarkPlusTableViewCell.self, forCellReuseIdentifier: "tableviewCellID")
+        tableView.register(BookmarkPlusTableViewCell.self, forCellReuseIdentifier: cellID.forTableView)
     }
 
     func setupTableViewConstraints() {
@@ -95,7 +95,7 @@ extension BookmarkPlusVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableviewCellID") as! BookmarkPlusTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID.forTableView) as! BookmarkPlusTableViewCell
         if self.isFiltering {
             cell.ramenImage.image = searchedArray[indexPath.row].image
 //            cell.bookmarButtonAction = { [unowned self] in
@@ -187,6 +187,6 @@ extension BookmarkPlusVC: UISearchBarDelegate {
 
 extension BookmarkPlusVC: CellButtonActionDelegate {
     func bookmarkButtonTapped() {
-        print("hi")
+        print("눌렸당")
     }
 }

@@ -21,9 +21,8 @@ extension RamenData {
     @NSManaged public var number: Int16
     @NSManaged public var settingTime: Int16
     @NSManaged public var suggestedTime: Int16
-    @NSManaged public var thumbnail: Data?
     @NSManaged public var title: String?
-    @NSManaged public var rating: Int16
+    @NSManaged public var water: Int16
     @NSManaged public var spicyLevel: Int16
     @NSManaged public var brand: String?
     @NSManaged public var color: String?

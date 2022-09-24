@@ -15,14 +15,6 @@ enum RamenBrands: CaseIterable {
     case paldo
 }
 
-enum RatingStars {
-    case oneStar
-    case twoStar
-    case threeStar
-    case fourStar
-    case fiveStar
-}
-
 enum SpicyLevel {
     case mild
     case spicy
@@ -48,7 +40,7 @@ struct Ramen {
     var title: String?
     var suggestedTime: Int?
     var settingTime: Int?
-    var rating: RatingStars?
+    var water: Int?
     var memo: String?
     var brand: RamenBrands?
     var bookmark: Bool = false

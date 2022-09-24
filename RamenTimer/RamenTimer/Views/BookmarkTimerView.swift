@@ -53,12 +53,12 @@ final class BookmarkTimerView: UIView {
     
     lazy var playButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        button.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         button.backgroundColor = .clear
         button.imageView?.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-
+        button.tintColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         return button
     }()
     
@@ -69,8 +69,9 @@ final class BookmarkTimerView: UIView {
         slider.value = slider.maximumValue
         slider.isContinuous = true
         slider.maximumTrackTintColor = .lightGray
-        slider.minimumTrackTintColor = .systemBlue
+        slider.minimumTrackTintColor = .darkGray
         slider.backgroundColor = .clear
+
         return slider
     }()
     
@@ -91,20 +92,18 @@ final class BookmarkTimerView: UIView {
     
     lazy var cellRatingStarLabel: UILabel = {
         let label = UILabel()
-        label.text = "별점 : "
+        label.text = "권장물양 : "
         label.backgroundColor = .clear
         label.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
-//        label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
         label.frame.size.width = 30
         return label
     }()
     
-    lazy var ratingStarLabel: UILabel = {
+    lazy var waterSuggestedLabel: UILabel = {
         let label = UILabel()
-        label.text = "⭐️⭐️⭐️⭐️⭐️"
+        label.text = "0 ml"
         label.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
-//        label.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
-
+        label.textAlignment = .right
         return label
     }()
     
@@ -121,7 +120,7 @@ final class BookmarkTimerView: UIView {
     }()
     
     lazy var secondLabelStackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [cellRatingStarLabel, ratingStarLabel])
+       let stackView = UIStackView(arrangedSubviews: [cellRatingStarLabel, waterSuggestedLabel])
         stackView.spacing = 10
         stackView.axis = .horizontal
         stackView.alignment = .fill
@@ -142,8 +141,7 @@ final class BookmarkTimerView: UIView {
     
     lazy var memoTextView: UITextView = {
        let textView = UITextView()
-//        textView.frame.size.height = 50
-        textView.backgroundColor = .systemBlue
+        textView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
         textView.text = ""
         
         
@@ -162,26 +160,25 @@ final class BookmarkTimerView: UIView {
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.backgroundColor = .clear
+        stackView.backgroundColor = .white
         
         return stackView
     }()
     
 
     
-    lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.backgroundColor = .clear
-        scrollView.showsVerticalScrollIndicator = true
-        scrollView.contentSize = CGSize(width: 100, height: 700)
-        scrollView.backgroundColor = .white
-        return scrollView
-    }()
+//    lazy var scrollView: UIScrollView = {
+//        let scrollView = UIScrollView()
+//        scrollView.backgroundColor = .clear
+//        scrollView.showsVerticalScrollIndicator = true
+//        scrollView.contentSize = CGSize(width: 100, height: 700)
+//        scrollView.backgroundColor = .white
+//        return scrollView
+//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         makeUI()
-//        clearTextField.delegate = self
 
     }
     
@@ -191,11 +188,9 @@ final class BookmarkTimerView: UIView {
     
     
     func makeUI() {
-        self.addSubview(scrollView)
-        scrollView.addSubview(mainStackView)
+        self.addSubview(mainStackView)
         self.addSubview(clearTextField)
         
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         clearTextField.translatesAutoresizingMaskIntoConstraints = false
         playButton.translatesAutoresizingMaskIntoConstraints = false
@@ -206,7 +201,7 @@ final class BookmarkTimerView: UIView {
         cellSugestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         suggestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         cellRatingStarLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingStarLabel.translatesAutoresizingMaskIntoConstraints = false
+        waterSuggestedLabel.translatesAutoresizingMaskIntoConstraints = false
         firstLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         secondLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         totalLabelStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -215,21 +210,12 @@ final class BookmarkTimerView: UIView {
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
+
             
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            scrollView.heightAnchor.constraint(equalTo: mainStackView.heightAnchor),
-            
-            
-            mainStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-//            mainStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-//            mainStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 0),
-            mainStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: 0),
-            mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
-            mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            mainStackView.topAnchor.constraint(equalTo: topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
             
             timeLabel.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 10),
@@ -243,7 +229,6 @@ final class BookmarkTimerView: UIView {
             clearTextField.trailingAnchor.constraint(equalTo: timeLabel.trailingAnchor),
             
 
-//            playButton.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 100),
             stackViewForButton.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             stackViewForButton.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
             stackViewForButton.heightAnchor.constraint(equalToConstant: 80),
@@ -268,27 +253,14 @@ final class BookmarkTimerView: UIView {
 
         ])
     }
-    
-//    override func updateConstraints() {
-//        myButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5).isActive = true
-//        myButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
-//        myButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        myButton.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//
-//        super.updateConstraints()
-//    }
-    
-    
+
     
     
     
 }
 
 extension BookmarkTimerView: UITextFieldDelegate {
-    
+    //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    //        return false
+    //    }
 }
-//extension BookmarkTimerView: UITextFieldDelegate {
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        return false
-//    }
-//}

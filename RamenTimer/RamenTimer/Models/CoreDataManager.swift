@@ -19,8 +19,28 @@ class CoreDataManager {
     // 임시저장소
     lazy var context = appDelegate?.persistentContainer.viewContext
     
+    class func getContext () -> NSManagedObjectContext {
+        return DatabaseController.persistentContainer.viewContext
+    }
+    
     // 엔터티 이름 (코어데이터에 저장된 객체)
     let modelName: String = "RamenData"
+    
+    
+    // MARK: - Core Data Saving support
+    class func saveContext() {
+        let context = self.getContext()
+        if context.hasChanges {
+            do {
+                try context.save()
+                print("Data Saved to Context")
+            } catch {
+
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
     
     // MARK: - [Read] 코어데이터에 저장된 데이터 모두 읽어오기
         func getRamenListFromCoreData() -> [RamenData] {
@@ -32,8 +52,8 @@ class CoreDataManager {
                 // 정렬순서를 정해서 요청서에 넘겨주기
 //                let dateOrder = NSSortDescriptor(key: "date", ascending: false)
 //                request.sortDescriptors = [dateOrder]
-                let dateOrder = NSSortDescriptor(key: "number", ascending: false)
-                request.sortDescriptors = [dateOrder]
+                let numberOrder = NSSortDescriptor(key: "number", ascending: false)
+                request.sortDescriptors = [numberOrder]
                 
                 do {
                     // 임시저장소에서 (요청서를 통해서) 데이터 가져오기 (fetch메서드)
@@ -49,7 +69,7 @@ class CoreDataManager {
         }
     
     // MARK: - [Create] 코어데이터에 데이터 생성하기
-    func saveToDoData(number: Int16, title: String?, bookmark: Bool = false, brand: String?, memo: String?, rating: Int16, settingTime: Int16, spicyLevel: Int16, suggestedTime: Int16, thumbnail: Data?, color: String?  , completion: @escaping () -> Void) {
+    func saveRamenData(number: Int16, title: String?, bookmark: Bool = false, brand: String?, memo: String?, water: Int16, settingTime: Int16, spicyLevel: Int16, suggestedTime: Int16, color: String?  , completion: @escaping () -> Void) {
             // 임시저장소 있는지 확인
             if let context = context {
                 // 임시저장소에 있는 데이터를 그려줄 형태 파악하기
@@ -65,11 +85,10 @@ class CoreDataManager {
                         ramenData.bookmark = bookmark
                         ramenData.brand = brand
                         ramenData.memo = memo
-                        ramenData.rating = rating
+                        ramenData.water = water
                         ramenData.settingTime = settingTime
                         ramenData.spicyLevel = spicyLevel
                         ramenData.suggestedTime = suggestedTime
-                        ramenData.thumbnail = thumbnail
                         ramenData.color = color
                         
                         appDelegate?.saveContext()
@@ -80,14 +99,14 @@ class CoreDataManager {
         }
     
     // MARK: - [Delete] 코어데이터에서 데이터 삭제하기 (일치하는 데이터 찾아서 ===> 삭제)
-        func deleteToDo(data: RamenData, completion: @escaping () -> Void) {
+        func deleteRamenData(data: RamenData, completion: @escaping () -> Void) {
             
             // 임시저장소 있는지 확인
             if let context = context {
                 // 요청서
                 let request = NSFetchRequest<NSManagedObject>(entityName: self.modelName)
                 // 단서 / 찾기 위한 조건 설정
-//                request.predicate = NSPredicate(format: "date = %@", date as CVarArg)
+                request.predicate = NSPredicate(format: "number = %@", data.number as CVarArg)
                 
                 do {
                     // 요청서를 통해서 데이터 가져오기 (조건에 일치하는 데이터 찾기) (fetch메서드)
@@ -109,9 +128,9 @@ class CoreDataManager {
         }
     
     // MARK: - [Update] 코어데이터에서 데이터 수정하기 (일치하는 데이터 찾아서 ===> 수정)
-        func updateToDo(newRamenData: RamenData, completion: @escaping () -> Void) {
+        func updateRamenData(newRamenData: RamenData, completion: @escaping () -> Void) {
             // 날짜 옵셔널 바인딩
-//            guard let date = newToDoData.date else {
+//            guard let data = newRamenData.number else {
 //                completion()
 //                return
 //            }
@@ -121,7 +140,7 @@ class CoreDataManager {
                 // 요청서
                 let request = NSFetchRequest<NSManagedObject>(entityName: self.modelName)
                 // 단서 / 찾기 위한 조건 설정
-//                request.predicate = NSPredicate(format: "date = %@", date as CVarArg)
+                request.predicate = NSPredicate(format: "number = %@", newRamenData.number as CVarArg)
                 
                 do {
                     // 요청서를 통해서 데이터 가져오기

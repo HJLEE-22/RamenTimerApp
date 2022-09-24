@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD33F9C128D04ED70001014E /* RamenModelCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */; };
+		AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C228D177FC0001014E /* DataBaseContainer.swift */; };
 		ADB3835F28C0931B00D17272 /* BookmarkBasicBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */; };
-		ADB3836128C1991000D17272 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836028C1990F00D17272 /* Colors.swift */; };
 		ADB3836528C2208800D17272 /* alarm_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ADB3836428C2208800D17272 /* alarm_sound.mp3 */; };
 		ADB3836828C7353C00D17272 /* RamenData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */; };
 		ADB3836928C7353C00D17272 /* RamenData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */; };
@@ -17,6 +18,7 @@
 		ADB3836F28C770B600D17272 /* RamenSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836E28C770B600D17272 /* RamenSearchCollectionViewCell.swift */; };
 		ADB3837128C770CC00D17272 /* RamenSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3837028C770CC00D17272 /* RamenSearchDetailView.swift */; };
 		ADB3837328C837FF00D17272 /* RamenSearchDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3837228C837FF00D17272 /* RamenSearchDetailVC.swift */; };
+		ADB3837528C8BC3900D17272 /* Ramens.json in Resources */ = {isa = PBXBuildFile; fileRef = ADB3837428C8BC3900D17272 /* Ramens.json */; };
 		ADCE5F6528B9C76300A42575 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F6428B9C76300A42575 /* AppDelegate.swift */; };
 		ADCE5F6728B9C76300A42575 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F6628B9C76300A42575 /* SceneDelegate.swift */; };
 		ADCE5F6928B9C76300A42575 /* BookmarkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F6828B9C76300A42575 /* BookmarkVC.swift */; };
@@ -36,8 +38,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenModelCodeable.swift; sourceTree = "<group>"; };
+		AD33F9C228D177FC0001014E /* DataBaseContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseContainer.swift; sourceTree = "<group>"; };
 		ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkBasicBackgroundView.swift; sourceTree = "<group>"; };
-		ADB3836028C1990F00D17272 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		ADB3836428C2208800D17272 /* alarm_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm_sound.mp3; sourceTree = "<group>"; };
 		ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RamenData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RamenData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		ADB3836E28C770B600D17272 /* RamenSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		ADB3837028C770CC00D17272 /* RamenSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchDetailView.swift; sourceTree = "<group>"; };
 		ADB3837228C837FF00D17272 /* RamenSearchDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchDetailVC.swift; sourceTree = "<group>"; };
+		ADB3837428C8BC3900D17272 /* Ramens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Ramens.json; sourceTree = "<group>"; };
 		ADCE5F6128B9C76300A42575 /* RamenTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RamenTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCE5F6428B9C76300A42575 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADCE5F6628B9C76300A42575 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,9 +147,12 @@
 			children = (
 				ADCE5F9528BDED8B00A42575 /* Ramen.swift */,
 				ADCE5F9728BDEE0A00A42575 /* RamensDataManager.swift */,
+				ADB3836A28C735A000D17272 /* CoreDataManager.swift */,
+				ADB3837428C8BC3900D17272 /* Ramens.json */,
 				ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */,
 				ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */,
-				ADB3836A28C735A000D17272 /* CoreDataManager.swift */,
+				AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */,
+				AD33F9C228D177FC0001014E /* DataBaseContainer.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -154,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				ADCE5F8728B9E23800A42575 /* Constants.swift */,
-				ADB3836028C1990F00D17272 /* Colors.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -218,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCE5F7428B9C76500A42575 /* LaunchScreen.storyboard in Resources */,
+				ADB3837528C8BC3900D17272 /* Ramens.json in Resources */,
 				ADCE5F7128B9C76500A42575 /* Assets.xcassets in Resources */,
 				ADB3836528C2208800D17272 /* alarm_sound.mp3 in Resources */,
 				ADCE5F6C28B9C76300A42575 /* Main.storyboard in Resources */,
@@ -232,11 +239,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCE5F6928B9C76300A42575 /* BookmarkVC.swift in Sources */,
-				ADB3836128C1991000D17272 /* Colors.swift in Sources */,
 				ADCE5F7F28B9D93700A42575 /* RamenSearchVC.swift in Sources */,
 				ADB3836B28C735A000D17272 /* CoreDataManager.swift in Sources */,
 				ADB3836D28C7708700D17272 /* RamenSearchView.swift in Sources */,
 				ADCE5F9028BDA54400A42575 /* BookmarkPlusVC.swift in Sources */,
+				AD33F9C128D04ED70001014E /* RamenModelCodeable.swift in Sources */,
+				AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */,
 				ADCE5F6528B9C76300A42575 /* AppDelegate.swift in Sources */,
 				ADB3836928C7353C00D17272 /* RamenData+CoreDataProperties.swift in Sources */,
 				ADCE5F8328B9DA4C00A42575 /* BookmarkTimerView.swift in Sources */,

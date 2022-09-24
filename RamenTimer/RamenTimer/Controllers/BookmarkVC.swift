@@ -7,11 +7,96 @@
 
 import UIKit
 import AVFoundation
+import CoreData
 
 class BookmarkVC: UIViewController {
 
+    // MARK: - 코어데이터 관련 코드 모음(수정예정)
+    
+    var ramens:[RamenData]?
+
+    var newRamens:[RamenModelCodable]? {
+        didSet {
+            // Remove all Previous Records
+            DatabaseController.deleteAllRamens()
+            // Add the new spots to Core Data Context
+            self.addNewRamensToCoreData(self.newRamens!)
+            // Save them to Core Data
+            DatabaseController.saveContext()
+            // Reload the tableView
+            reloadCollectionView()
+        }
+    }
+    
+    func reloadCollectionView() {
+        DispatchQueue.main.async {
+         self.collectionView.reloadData()
+        }
+    }
+
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        self.ramens = DatabaseController.getAllRamens()
+//    }
+    
+    override func didReceiveMemoryWarning() {
+         super.didReceiveMemoryWarning()
+         // Dispose of any resources that can be recreated.
+     }
+    
+//    @objc func getDataFromJSON() {
+//        print("Updating...")
+//
+//
+//        guard let url = URL( else {return}
+//
+//        let data = Data(contentsOf: <#T##URL#>)
+//        let task = URLSession.shared.dataTask(with: url) {
+//            (data, response, error) in
+//                guard let dataResponse = data, error == nil else {
+//                        print(error?.localizedDescription ?? "Response Error")
+//                return }
+//
+//            do {
+//                self.newShows = try JSONDecoder().decode([RamenModelCodable].self, from: dataResponse)
+//            } catch {
+//                print(error)
+//            }
+//        }
+//
+//        task.resume()
+//    }
+    
+    func addNewRamensToCoreData(_ shows: [RamenModelCodable]) {
+
+        for ramen in ramens! {
+            let entity = NSEntityDescription.entity(forEntityName: "RamenData", in: DatabaseController.getContext())
+            let newRamen = NSManagedObject(entity: entity!, insertInto: DatabaseController.getContext())
+
+            // Create a unique ID for the Show.
+            let uuid = UUID()
+            // Set the data to the entity
+            newRamen.setValue(ramen.title, forKey: "title")
+            newRamen.setValue(ramen.number, forKey: "name")
+            newRamen.setValue(ramen.bookmark, forKey: "bookmark")
+            newRamen.setValue(ramen.brand, forKey: "brand")
+            newRamen.setValue(ramen.spicyLevel, forKey: "spicyLevel")
+            newRamen.setValue(ramen.water, forKey: "water")
+            newRamen.setValue(ramen.settingTime, forKey: "settingTime")
+            newRamen.setValue(ramen.suggestedTime, forKey: "suggestedTime")
+            newRamen.setValue(ramen.memo, forKey: "memo")
+            newRamen.setValue(ramen.color, forKey: "color")
+        }
+
+    }
+    
+    
+    
 // MARK: - 기본 인스턴스들
     
+    
+
+
 
     let ramensDataManager = RamensDataManager()
     
@@ -109,6 +194,7 @@ class BookmarkVC: UIViewController {
         title = "즐겨찾기"
         navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.rightBarButtonItem = plusButton
+        self.navigationItem.rightBarButtonItem?.tintColor = .black
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         self.navigationItem.backBarButtonItem = backBarButtonItem
     }
@@ -128,7 +214,7 @@ class BookmarkVC: UIViewController {
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
 
-        collectionView.register(BookmarkTimerCollectionViewCell.self, forCellWithReuseIdentifier: "cellID")
+        collectionView.register(BookmarkTimerCollectionViewCell.self, forCellWithReuseIdentifier: cellID.forCollectionView)
     }
 
     func setupCollectionViewConstraints() {
@@ -149,7 +235,7 @@ class BookmarkVC: UIViewController {
     func setupBookmarkTimerView() {
 //        bookmarkTimerView.layer.cornerRadius = CGFloat(40)
         bookmarkTimerView.layer.borderWidth = 10
-        bookmarkTimerView.layer.borderColor = UIColor.systemBlue.cgColor
+        bookmarkTimerView.layer.borderColor = UIColor.lightGray.cgColor
         bookmarkTimerView.clipsToBounds = true
     }
     
@@ -253,7 +339,7 @@ class BookmarkVC: UIViewController {
     
     func setupPlayButtonForCellSelect() {
         bookmarkTimerView.playButton.isEnabled = true
-        bookmarkTimerView.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        bookmarkTimerView.playButton.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         
     }
     
@@ -262,10 +348,10 @@ class BookmarkVC: UIViewController {
         if bookmarkTimerView.playButton.image(for: .normal) == UIImage(systemName: "play.fill") {
             timer?.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countingTimer), userInfo: nil, repeats: true)
-            bookmarkTimerView.playButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            bookmarkTimerView.playButton.setImage(UIImage(systemName: ImageSystemNames.pause), for: .normal)
         } else {
             timer?.invalidate()
-            bookmarkTimerView.playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            bookmarkTimerView.playButton.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
         }
     }
     
@@ -318,7 +404,7 @@ class BookmarkVC: UIViewController {
     }
     
     func configureTimerAlert() {
-        let url = Bundle.main.url(forResource: "alarm_sound", withExtension: "mp3")
+        let url = Bundle.main.url(forResource: AlarmSound.name, withExtension: AlarmSound.extention)
         player = try! AVAudioPlayer(contentsOf: url!)
         player.play()
         player.volume = 0.5
@@ -334,27 +420,12 @@ class BookmarkVC: UIViewController {
 
     
     // MARK: - 별점 셋업
-    func setupRatingStar(indexPath: IndexPath) {
-        guard let ratingStar = ramensDataManager.getRamenArray()[indexPath.row].rating else { return }
-        switch ratingStar {
-        case .oneStar:
-            bookmarkTimerView.ratingStarLabel.text = "⭐️"
-            bookmarkTimerView.ratingStarLabel.textAlignment = .left
-        case .twoStar:
-            bookmarkTimerView.ratingStarLabel.text = "⭐️⭐️"
-            bookmarkTimerView.ratingStarLabel.textAlignment = .left
-
-        case .threeStar:
-            bookmarkTimerView.ratingStarLabel.text = "⭐️⭐️⭐️"
-            bookmarkTimerView.ratingStarLabel.textAlignment = .left
-
-        case .fourStar:
-            bookmarkTimerView.ratingStarLabel.text = "⭐️⭐️⭐️⭐️"
-            bookmarkTimerView.ratingStarLabel.textAlignment = .left
-
-        case .fiveStar:
-            bookmarkTimerView.ratingStarLabel.text = "⭐️⭐️⭐️⭐️⭐️"
-        }
+    func setupSuggestedWater(indexPath: IndexPath) {
+        guard let water = ramensDataManager.getRamenArray()[indexPath.row].water else { return }
+        bookmarkTimerView.waterSuggestedLabel.text = "\(water) ml"
+        
+        
+        
     }
     
     
@@ -379,7 +450,7 @@ class BookmarkVC: UIViewController {
         singleTapGestureRecognizer.numberOfTapsRequired = 1
         singleTapGestureRecognizer.isEnabled = true
         singleTapGestureRecognizer.cancelsTouchesInView = false
-        bookmarkTimerView.scrollView.addGestureRecognizer(singleTapGestureRecognizer)
+//        bookmarkTimerView.scrollView.addGestureRecognizer(singleTapGestureRecognizer)
     }
     
     @objc func myTapMethod(sender: UITapGestureRecognizer) {
@@ -509,7 +580,7 @@ extension BookmarkVC: UICollectionViewDelegate {
         setupTimerLabel(indexPath: indexPath)
         setupTimeSlider(indexPath: indexPath)
         setupPlayButtonForCellSelect()
-        setupRatingStar(indexPath: indexPath)
+        setupSuggestedWater(indexPath: indexPath)
         setupTimerTextView(indexPath: indexPath)
         setupBookmarkTimerViewAnimation()
         showPickerView()
@@ -523,7 +594,7 @@ extension BookmarkVC: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! BookmarkTimerCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID.forCollectionView, for: indexPath) as! BookmarkTimerCollectionViewCell
         cell.imageView.image = ramensDataManager.getRamenArray()[indexPath.row].image
         return cell
     }
