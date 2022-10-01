@@ -5,12 +5,12 @@
         <attribute name="brand" optional="YES" attributeType="String"/>
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="memo" optional="YES" attributeType="String"/>
-        <attribute name="number" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="settingTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="spicyLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="suggestedTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="number" optional="YES" attributeType="String"/>
+        <attribute name="settingTime" optional="YES" attributeType="String"/>
+        <attribute name="spicyLevel" optional="YES" attributeType="String"/>
+        <attribute name="suggestedTime" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <attribute name="water" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="water" optional="YES" attributeType="String"/>
     </entity>
     <elements>
         <element name="RamenData" positionX="-54" positionY="-9" width="128" height="179"/>

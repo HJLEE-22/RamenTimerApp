@@ -13,7 +13,7 @@ class BookmarkBasicBackgroundView: UIView {
        let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 40)
         label.text = "라면을 골라주세요"
-        label.textColor = .systemBlue
+        label.textColor = .black
         return label
     }()
     
@@ -30,9 +30,7 @@ class BookmarkBasicBackgroundView: UIView {
         sv.distribution = .fill
         sv.backgroundColor = .clear
         sv.spacing = 20
-
-    return sv
-        
+        return sv
     }()
     
     override init(frame: CGRect) {

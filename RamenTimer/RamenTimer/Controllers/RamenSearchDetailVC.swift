@@ -12,7 +12,7 @@ class RamenSearchDetailVC: UIViewController {
 
     let ramenSearchDetailVeiw = RamenSearchDetailView()
 
-    var ramenData: Ramen?
+    var ramenData: RamenData?
     
     var timer: Timer?
     var player: AVAudioPlayer!
@@ -47,7 +47,7 @@ class RamenSearchDetailVC: UIViewController {
         setupSuggestedWater()
         setupTimerTextView()
         showPickerView()
-        
+        setupSaveButton()
         
     }
 
@@ -88,27 +88,23 @@ class RamenSearchDetailVC: UIViewController {
         
         guard let ramenData = ramenData else { return }
 
-        if let settingTimer = ramenData.settingTime {
-//            bookmarkTimerView.timeLabel.text = settingTimer
-            let minutes: Int = settingTimer / 60
-            let seconds: Int = settingTimer - (minutes * 60)
+        if let settingTimer = ramenData.settingTime,
+           let intSettingTimer = Int(settingTimer) {
+            
+            let minutes: Int = intSettingTimer / 60
+            let seconds: Int = intSettingTimer - (minutes * 60)
             mins = minutes
             secs = seconds
             
             calculateMinsAndSecs(mins: mins, secs: secs)
             
-        } else if let suggestTimer = ramenData.suggestedTime {
-            let minutes: Int = suggestTimer / 60
-            let seconds: Int = suggestTimer - (minutes * 60)
-            mins = minutes
-            secs = seconds
-            calculateMinsAndSecs(mins: mins, secs: secs)
         }
         
         //추천 레이블 표시
-        if let suggestTimer = ramenData.suggestedTime {
-            let minutes: Int = suggestTimer / 60
-            let seconds: Int = suggestTimer - (minutes * 60)
+        if let suggestTimer = ramenData.suggestedTime,
+            let intSuggestedTimer = Int(suggestTimer) {
+            let minutes: Int = intSuggestedTimer / 60
+            let seconds: Int = intSuggestedTimer - (minutes * 60)
 
             if minutes == 0 && seconds == 0 {
                 ramenSearchDetailVeiw.suggestedTimeLabel.text = "00:00"
@@ -194,14 +190,11 @@ class RamenSearchDetailVC: UIViewController {
  
     func setupTimeSlider() {
         
-        guard let ramenData = ramenData else { return }
-        guard let settingTime = ramenData.settingTime else {
-            ramenSearchDetailVeiw.timeSlider.maximumValue = Float(ramenData.suggestedTime ?? 0)
-            ramenSearchDetailVeiw.timeSlider.value = Float(ramenData.suggestedTime ?? 0)
-            return
-        }
-        ramenSearchDetailVeiw.timeSlider.maximumValue = Float(settingTime)
-        ramenSearchDetailVeiw.timeSlider.value = Float(settingTime)
+        guard let ramenData = ramenData,
+              let settingTime = ramenData.settingTime,
+              let floatSettingTime = Float(settingTime) else { return }
+        ramenSearchDetailVeiw.timeSlider.maximumValue = floatSettingTime
+        ramenSearchDetailVeiw.timeSlider.value = floatSettingTime
     }
     
     func updateSlider() {
@@ -223,11 +216,45 @@ class RamenSearchDetailVC: UIViewController {
         self.present(alert, animated: true)
     }
     
-    // MARK: - 별점 셋업
+    // MARK: - 권장물양 셋업
     func setupSuggestedWater() {
         guard let ramenData = ramenData, let water = ramenData.water else { return }
         ramenSearchDetailVeiw.suggestedWaterLabel.text = "\(water) ml"
     }
+    
+    // MARK: - 텍스트뷰 저장 버튼 셋업
+    
+    func setupSaveButton() {
+        ramenSearchDetailVeiw.memoSavebutton.addTarget(self, action: #selector(saveMemoTapped), for: .touchUpInside)
+    }
+    
+    @objc func saveMemoTapped() {
+        if ramenSearchDetailVeiw.memoTextView.text == TextViewPlaceholder.PleaseWrite {
+            return
+        } else if ramenSearchDetailVeiw.memoTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            callUpdateRamenData()
+        } else {
+            callUpdateRamenData()
+            
+        }
+        
+    }
+    
+    func callUpdateRamenData() {
+        guard let ramen = self.ramenData else { return }
+        ramen.memo = ramenSearchDetailVeiw.memoTextView.text
+        CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
+            print("DEBUG: ramen 메모 변경: \(ramen)")
+            let alert = UIAlertController(title: "메모 변경", message: "메모가 변경되었습니다.", preferredStyle: .alert)
+            let check = UIAlertAction(title: "OK", style: .default) { _ in
+                
+            }
+            alert.addAction(check)
+            self.present(alert, animated: true)
+        })
+    }
+    
+    
     
     // MARK: - 텍스트뷰 셋업
 
@@ -316,12 +343,22 @@ class RamenSearchDetailVC: UIViewController {
     @objc func onPickDone() {
         /// 확인 눌렀을 때 액션 정의
         
-        settedTime = (componentMin * 60) + componentSec
-        // 여기서 라면indexPath.row 값을 어떻게 전달받지? 아놔...
-        // 내가 그래서... 혹시 몰라서 라면들에 인덱스값을 걸어놓긴 했거든?
-        // 그거를... 활용해야하나...?
-        // 근데 만약 데이터에 해당 인덱스값이 없는 경우라면 어떡하지?ㅜ
-        // 일단 어쨌든 코어데이터에 값을 변경해야 하는 경우이니 나중에 다시 해보기로.
+        let timeToString = String((componentMin * 60) + componentSec)
+        guard let ramen = self.ramenData else { return }
+        ramen.settingTime = timeToString
+        CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
+            print("피커뷰로 시간 바뀐 \(ramen)")
+            
+            let alert = UIAlertController(title: "시간 변경", message: "타이머 시간이 변경되었습니다.", preferredStyle: .alert)
+            let check = UIAlertAction(title: "OK", style: .default) { _ in
+                // 피커뷰 종료 -> dismiss 대신 endEditing으로
+                self.view.endEditing(true)
+            }
+            alert.addAction(check)
+            self.present(alert, animated: true)
+            
+        })
+
         ramenSearchDetailVeiw.clearTextField.resignFirstResponder()
 
     }

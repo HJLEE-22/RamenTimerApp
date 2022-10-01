@@ -11,94 +11,33 @@ import CoreData
 
 class BookmarkVC: UIViewController {
 
-    // MARK: - 코어데이터 관련 코드 모음(수정예정)
+    // MARK: - coredata property
     
     var ramens:[RamenData]?
-
-    var newRamens:[RamenModelCodable]? {
+    
+    var ramen: RamenData?
+    
+    var bookmarkedRamens: [RamenData]? {
         didSet {
-            // Remove all Previous Records
-            DatabaseController.deleteAllRamens()
-            // Add the new spots to Core Data Context
-            self.addNewRamensToCoreData(self.newRamens!)
-            // Save them to Core Data
-            DatabaseController.saveContext()
-            // Reload the tableView
-            reloadCollectionView()
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.collectionView.reloadData()
+            }
         }
     }
     
-    func reloadCollectionView() {
-        DispatchQueue.main.async {
-         self.collectionView.reloadData()
-        }
-    }
-
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        self.ramens = DatabaseController.getAllRamens()
-//    }
-    
-    override func didReceiveMemoryWarning() {
-         super.didReceiveMemoryWarning()
-         // Dispose of any resources that can be recreated.
-     }
-    
-//    @objc func getDataFromJSON() {
-//        print("Updating...")
-//
-//
-//        guard let url = URL( else {return}
-//
-//        let data = Data(contentsOf: <#T##URL#>)
-//        let task = URLSession.shared.dataTask(with: url) {
-//            (data, response, error) in
-//                guard let dataResponse = data, error == nil else {
-//                        print(error?.localizedDescription ?? "Response Error")
-//                return }
-//
-//            do {
-//                self.newShows = try JSONDecoder().decode([RamenModelCodable].self, from: dataResponse)
-//            } catch {
-//                print(error)
-//            }
+//    func reloadCollectionView() {
+//        DispatchQueue.main.async {
+//         self.collectionView.reloadData()
 //        }
-//
-//        task.resume()
 //    }
-    
-    func addNewRamensToCoreData(_ shows: [RamenModelCodable]) {
 
-        for ramen in ramens! {
-            let entity = NSEntityDescription.entity(forEntityName: "RamenData", in: DatabaseController.getContext())
-            let newRamen = NSManagedObject(entity: entity!, insertInto: DatabaseController.getContext())
-
-            // Create a unique ID for the Show.
-            let uuid = UUID()
-            // Set the data to the entity
-            newRamen.setValue(ramen.title, forKey: "title")
-            newRamen.setValue(ramen.number, forKey: "name")
-            newRamen.setValue(ramen.bookmark, forKey: "bookmark")
-            newRamen.setValue(ramen.brand, forKey: "brand")
-            newRamen.setValue(ramen.spicyLevel, forKey: "spicyLevel")
-            newRamen.setValue(ramen.water, forKey: "water")
-            newRamen.setValue(ramen.settingTime, forKey: "settingTime")
-            newRamen.setValue(ramen.suggestedTime, forKey: "suggestedTime")
-            newRamen.setValue(ramen.memo, forKey: "memo")
-            newRamen.setValue(ramen.color, forKey: "color")
-        }
-
-    }
-    
-    
+//    override func didReceiveMemoryWarning() {
+//         super.didReceiveMemoryWarning()
+//         // Dispose of any resources that can be recreated.
+//     }
     
 // MARK: - 기본 인스턴스들
-    
-    
-
-
-
-    let ramensDataManager = RamensDataManager()
     
     private var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -145,23 +84,20 @@ class BookmarkVC: UIViewController {
     
     var settedTime: Int?
     
-
-    
-
-    
     
 // MARK: - 뷰 load, appear
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNaviBar()
         setupCollectionView()
-//        setupCollectionViewLayout()
         setupCollectionViewConstraints()
-//        showCellDetailViews()
         setupPlayButton()
         setupScrollView()
         setupBackgroundView()
         bookmarkTimerView.clearTextField.delegate = self
+        ramens = CoreDataManager.shared.getRamenListFromCoreData()
+        self.collectionView.reloadData()
+        print("DEBUG: 북마크된 라면들 \(bookmarkedRamens)")
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -171,6 +107,7 @@ class BookmarkVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.addKeyboardNotifications()
+        bookmarkedRamens = ramens?.filter( { $0.bookmark == true })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -234,8 +171,8 @@ class BookmarkVC: UIViewController {
     // MARK: - 타이머뷰 셋업
     func setupBookmarkTimerView() {
 //        bookmarkTimerView.layer.cornerRadius = CGFloat(40)
-        bookmarkTimerView.layer.borderWidth = 10
-        bookmarkTimerView.layer.borderColor = UIColor.lightGray.cgColor
+        bookmarkTimerView.layer.borderWidth = 1.5
+        bookmarkTimerView.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         bookmarkTimerView.clipsToBounds = true
     }
     
@@ -274,38 +211,37 @@ class BookmarkVC: UIViewController {
     // 카운트 하기전에 우선 보여주기
     func setupTimerLabel(indexPath: IndexPath) {
         
-
         
-        if let settingTimer = ramensDataManager.getRamenArray()[indexPath.row].settingTime {
-//            bookmarkTimerView.timeLabel.text = settingTimer
-            let minutes: Int = settingTimer / 60
-            let seconds: Int = settingTimer - (minutes * 60)
+        if let bookmarkedRamens = self.bookmarkedRamens {
+            let cellModel = bookmarkedRamens[indexPath.row]
+            
+            // 개별 ramen 인스턴스에 정보 주기.(레이블 뿐만 아니라 모델 전체 정보 전달)
+            self.ramen = cellModel
+            guard let settingTimer = cellModel.settingTime,
+                  let intSettingTimer = Int(settingTimer) else { return }
+            let minutes: Int = intSettingTimer / 60
+            let seconds: Int = intSettingTimer - (minutes * 60)
             mins = minutes
             secs = seconds
             
             calculateMinsAndSecs(mins: mins, secs: secs)
             
-        } else if let suggestTimer = ramensDataManager.getRamenArray()[indexPath.row].suggestedTime {
-            let minutes: Int = suggestTimer / 60
-            let seconds: Int = suggestTimer - (minutes * 60)
-            mins = minutes
-            secs = seconds
-            calculateMinsAndSecs(mins: mins, secs: secs)
-        }
-        
-        //추천 레이블 표시
-        if let suggestTimer = ramensDataManager.getRamenArray()[indexPath.row].suggestedTime {
-            let minutes: Int = suggestTimer / 60
-            let seconds: Int = suggestTimer - (minutes * 60)
+            //추천 레이블 표시
 
-            if minutes == 0 && seconds == 0 {
-                bookmarkTimerView.suggestedTimeLabel.text = "00:00"
-            } else if seconds <= 10 && minutes <= 10{
-                bookmarkTimerView.suggestedTimeLabel.text = "0\(minutes):0\(seconds)"
-            } else if minutes <= 10 {
-                bookmarkTimerView.suggestedTimeLabel.text = "0\(minutes):\(seconds)"
-            } else {
-                bookmarkTimerView.suggestedTimeLabel.text = "\(minutes):\(seconds)"
+            if let suggestedTimer = cellModel.suggestedTime,
+               let intSuggestedTimer = Int(suggestedTimer) {
+                let minutes: Int = intSuggestedTimer / 60
+                let seconds: Int = intSuggestedTimer - (minutes * 60)
+                
+                if minutes == 0 && seconds == 0 {
+                    bookmarkTimerView.suggestedTimeLabel.text = "00:00"
+                } else if seconds <= 10 && minutes <= 10{
+                    bookmarkTimerView.suggestedTimeLabel.text = "0\(minutes):0\(seconds)"
+                } else if minutes <= 10 {
+                    bookmarkTimerView.suggestedTimeLabel.text = "0\(minutes):\(seconds)"
+                } else {
+                    bookmarkTimerView.suggestedTimeLabel.text = "\(minutes):\(seconds)"
+                }
             }
         }
     }
@@ -323,14 +259,6 @@ class BookmarkVC: UIViewController {
             bookmarkTimerView.timeLabel.text = "\(mins):\(secs)"
         }
     }
-    
-//    func addActionToLabel() {
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showPickerView))
-//        bookmarkTimerView.timeLabel.addGestureRecognizer(tapGestureRecognizer)
-//        bookmarkTimerView.timeLabel.isUserInteractionEnabled = true
-//    }
-    
-
     
     // MARK: - 카운트다운 플레이 버튼 셋업
     func setupPlayButton() {
@@ -355,6 +283,7 @@ class BookmarkVC: UIViewController {
         }
     }
     
+    // MARK: - 카운트다운 숫자표시 셋업
     // 카운트 실행 (Timer.scheduledTimer)
     @objc func countingTimer() {
         if self.secs > 0 {
@@ -389,18 +318,19 @@ class BookmarkVC: UIViewController {
     // MARK: - 슬라이더 셋업
  
     func setupTimeSlider(indexPath: IndexPath) {
-        guard let settingTime = ramensDataManager.getRamenArray()[indexPath.row].settingTime else {
-            bookmarkTimerView.timeSlider.maximumValue = Float(ramensDataManager.getRamenArray()[indexPath.row].suggestedTime ?? 0)
-            bookmarkTimerView.timeSlider.value = Float(ramensDataManager.getRamenArray()[indexPath.row].suggestedTime ?? 0)
-            return
-        }
-        bookmarkTimerView.timeSlider.maximumValue = Float(settingTime)
-        bookmarkTimerView.timeSlider.value = Float(settingTime)
+        guard let bookmarkedRamens = bookmarkedRamens else { return }
+              
+        let cellModel = bookmarkedRamens[indexPath.row]
+
+        guard let settingTime = cellModel.settingTime,
+              let floatSettingTime = Float(settingTime) else { return }
+        bookmarkTimerView.timeSlider.maximumValue = floatSettingTime
+        bookmarkTimerView.timeSlider.value = floatSettingTime
     }
     
     func updateSlider() {
         bookmarkTimerView.timeSlider.value = (Float(mins) * Float(60)) + Float(secs)
-        print(bookmarkTimerView.timeSlider.value)
+        print("DEBUG: 타임 슬라이더 변경값 \(bookmarkTimerView.timeSlider.value)")
     }
     
     func configureTimerAlert() {
@@ -417,31 +347,65 @@ class BookmarkVC: UIViewController {
         self.present(alert, animated: true)
     }
     
-
     
-    // MARK: - 별점 셋업
+    
+    // MARK: - 권장 물 양 셋업
     func setupSuggestedWater(indexPath: IndexPath) {
-        guard let water = ramensDataManager.getRamenArray()[indexPath.row].water else { return }
+        guard let bookmarkedRamens = bookmarkedRamens,
+              let water = bookmarkedRamens[indexPath.row].water else {
+            return
+        }
+        
         bookmarkTimerView.waterSuggestedLabel.text = "\(water) ml"
-        
-        
-        
+
     }
     
+    
+    // MARK: - 텍스트뷰 저장 버튼 셋업
+    
+    func setupSaveButton() {
+        bookmarkTimerView.memoSavebutton.addTarget(self, action: #selector(saveMemoTapped), for: .touchUpInside)
+    }
+    
+    @objc func saveMemoTapped() {
+        if bookmarkTimerView.memoTextView.text == TextViewPlaceholder.PleaseWrite {
+            return
+        } else if bookmarkTimerView.memoTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            callUpdateRamenData()
+        } else {
+            callUpdateRamenData()
+        }
+    }
+    
+    func callUpdateRamenData() {
+        guard let ramen = self.ramen else { return }
+        ramen.memo = bookmarkTimerView.memoTextView.text
+        CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
+            print("DEBUG: ramen 메모 변경: \(ramen)")
+            let alert = UIAlertController(title: "메모 변경", message: "메모가 변경되었습니다.", preferredStyle: .alert)
+            let check = UIAlertAction(title: "OK", style: .default) { _ in
+                
+            }
+            alert.addAction(check)
+            self.present(alert, animated: true)
+        })
+    }
     
     // MARK: - 텍스트뷰 셋업
 
     
     func setupTimerTextView(indexPath: IndexPath) {
         bookmarkTimerView.memoTextView.delegate = self
-        if let memoData = ramensDataManager.getRamenArray()[indexPath.row].memo {
-            bookmarkTimerView.memoTextView.text = memoData
-        } else {
-            bookmarkTimerView.memoTextView.text = "메모하실 내용이 있으면 입력하세요."
-            bookmarkTimerView.memoTextView.textColor = .lightGray
-
+        if let bookmarkedRamens = bookmarkedRamens,
+           let memoData = bookmarkedRamens[indexPath.row].memo {
+            if memoData == "" {
+                bookmarkTimerView.memoTextView.text = TextViewPlaceholder.PleaseWrite
+                bookmarkTimerView.memoTextView.textColor = .lightGray
+            } else {
+                bookmarkTimerView.memoTextView.text = memoData
+                bookmarkTimerView.memoTextView.textColor = .black
+            }
         }
-        
     }
     // MARK: - (텍스트뷰를 위한) 스크롤뷰 셋업
     // 스크롤뷰에서 터치로 키보드 resign하기 위한 함수
@@ -510,9 +474,9 @@ class BookmarkVC: UIViewController {
         if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            print(self.view.frame.origin.y)
 
-            self.view.frame.origin.y -= (keyboardHeight-(tabBarController?.tabBar.frame.size.height)!)
+
+            self.view.frame.origin.y -= (keyboardHeight)
         }
     }
 
@@ -520,13 +484,13 @@ class BookmarkVC: UIViewController {
         if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y += (keyboardHeight-(tabBarController?.tabBar.frame.size.height)!)
+            self.view.frame.origin.y += (keyboardHeight)
         }
 
     }
     
     // MARK: - pickerView 설정
-     func showPickerView() {
+    func showPickerView(indexPath: IndexPath) {
         let pickerView = UIPickerView()
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -534,7 +498,7 @@ class BookmarkVC: UIViewController {
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
         
-        let btnDone = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(onPickDone))
+        let btnDone = UIBarButtonItem(title: "확인", style: .done, target: self, action: #selector(onPickDone(_:)))
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let btnCancel = UIBarButtonItem(title: "취소", style: .done, target: self, action: #selector(onPickCancel))
         toolBar.setItems([btnCancel , space , btnDone], animated: true)
@@ -545,15 +509,25 @@ class BookmarkVC: UIViewController {
 
     }
     
-    @objc func onPickDone() {
+    @objc func onPickDone(_ sender: UIBarButtonItem) {
         /// 확인 눌렀을 때 액션 정의
+
+
+        let timeToString = String((componentMin * 60) + componentSec)
+        guard let ramen = self.ramen else { return print("DEBUG: ramen 없음") }
+        ramen.settingTime = timeToString
+        CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
+            print("DEBUG: 피커뷰로 시간 바뀐 \(ramen)")
+            
+            let alert = UIAlertController(title: "시간 변경", message: "타이머 시간이 변경되었습니다.", preferredStyle: .alert)
+            let check = UIAlertAction(title: "OK", style: .default) { _ in
+                // 피커뷰 종료 -> dismiss 대신 endEditing으로
+                self.view.endEditing(true)
+            }
+            alert.addAction(check)
+            self.present(alert, animated: true)
+        })
         
-        settedTime = (componentMin * 60) + componentSec
-        // 여기서 라면indexPath.row 값을 어떻게 전달받지? 아놔...
-        // 내가 그래서... 혹시 몰라서 라면들에 인덱스값을 걸어놓긴 했거든?
-        // 그거를... 활용해야하나...?
-        // 근데 만약 데이터에 해당 인덱스값이 없는 경우라면 어떡하지?ㅜ
-        // 일단 어쨌든 코어데이터에 값을 변경해야 하는 경우이니 나중에 다시 해보기로.
         bookmarkTimerView.clearTextField.resignFirstResponder()
 
     }
@@ -583,19 +557,28 @@ extension BookmarkVC: UICollectionViewDelegate {
         setupSuggestedWater(indexPath: indexPath)
         setupTimerTextView(indexPath: indexPath)
         setupBookmarkTimerViewAnimation()
-        showPickerView()
+        showPickerView(indexPath: indexPath)
+        setupSaveButton()
+
     }
-    
 }
 
 extension BookmarkVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ramensDataManager.getRamenArray().count
+        return bookmarkedRamens?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID.forCollectionView, for: indexPath) as! BookmarkTimerCollectionViewCell
-        cell.imageView.image = ramensDataManager.getRamenArray()[indexPath.row].image
+        
+        
+        if let bookmarkedRamens = bookmarkedRamens {
+            let cellModel = bookmarkedRamens[indexPath.row]
+            if let title = cellModel.title {
+                cell.imageView.image = UIImage(named: "\(title)")
+            }
+        }
+    
         return cell
     }
 }
@@ -603,7 +586,7 @@ extension BookmarkVC: UICollectionViewDataSource {
 // MARK: - 텍스트 뷰 익스텐션
 extension BookmarkVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if  textView.text == "메모하실 내용이 있으면 입력하세요." {
+        if  textView.text == TextViewPlaceholder.PleaseWrite {
             textView.text = nil
             textView.textColor = .black
         }
@@ -613,16 +596,14 @@ extension BookmarkVC: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         // 비어있으면 다시 플레이스 홀더처럼 입력하기 위해서 조건 확인
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = "메모하실 내용이 있으면 입력하세요."
+            textView.text = TextViewPlaceholder.PleaseWrite
             textView.textColor = .lightGray
             textView.resignFirstResponder()
         }
+        
     }
     
-//    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-//        self.view.endEditing(true)
-//        return false
-//    }
+    
 }
 
 // MARK: - pickerView 익스텐션

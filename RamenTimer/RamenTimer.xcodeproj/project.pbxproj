@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD33F9C128D04ED70001014E /* RamenModelCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */; };
+		AD33F9C128D04ED70001014E /* RamenModelCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C028D04ED70001014E /* RamenModelCodable.swift */; };
 		AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C228D177FC0001014E /* DataBaseContainer.swift */; };
 		ADB3835F28C0931B00D17272 /* BookmarkBasicBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */; };
 		ADB3836528C2208800D17272 /* alarm_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ADB3836428C2208800D17272 /* alarm_sound.mp3 */; };
@@ -33,12 +33,10 @@
 		ADCE5F8A28B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F8928B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift */; };
 		ADCE5F9028BDA54400A42575 /* BookmarkPlusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F8F28BDA54400A42575 /* BookmarkPlusVC.swift */; };
 		ADCE5F9228BDA62400A42575 /* BookmarkPlusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F9128BDA62400A42575 /* BookmarkPlusTableViewCell.swift */; };
-		ADCE5F9628BDED8B00A42575 /* Ramen.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F9528BDED8B00A42575 /* Ramen.swift */; };
-		ADCE5F9828BDEE0A00A42575 /* RamensDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F9728BDEE0A00A42575 /* RamensDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenModelCodeable.swift; sourceTree = "<group>"; };
+		AD33F9C028D04ED70001014E /* RamenModelCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenModelCodable.swift; sourceTree = "<group>"; };
 		AD33F9C228D177FC0001014E /* DataBaseContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseContainer.swift; sourceTree = "<group>"; };
 		ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkBasicBackgroundView.swift; sourceTree = "<group>"; };
 		ADB3836428C2208800D17272 /* alarm_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm_sound.mp3; sourceTree = "<group>"; };
@@ -66,8 +64,6 @@
 		ADCE5F8928B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTimerCollectionViewCell.swift; sourceTree = "<group>"; };
 		ADCE5F8F28BDA54400A42575 /* BookmarkPlusVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPlusVC.swift; sourceTree = "<group>"; };
 		ADCE5F9128BDA62400A42575 /* BookmarkPlusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPlusTableViewCell.swift; sourceTree = "<group>"; };
-		ADCE5F9528BDED8B00A42575 /* Ramen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ramen.swift; sourceTree = "<group>"; };
-		ADCE5F9728BDEE0A00A42575 /* RamensDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamensDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +77,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ADBEDA2528DEF5E5000895A9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ADB3837428C8BC3900D17272 /* Ramens.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		ADCE5F5828B9C76300A42575 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +110,7 @@
 				ADCE5F7D28B9C79A00A42575 /* Models */,
 				ADCE5F7C28B9C79200A42575 /* Views */,
 				ADCE5F7B28B9C78B00A42575 /* Controllers */,
+				ADBEDA2528DEF5E5000895A9 /* Resources */,
 				ADCE5F6A28B9C76300A42575 /* Main.storyboard */,
 				ADCE5F7028B9C76500A42575 /* Assets.xcassets */,
 				ADCE5F7228B9C76500A42575 /* LaunchScreen.storyboard */,
@@ -145,13 +150,10 @@
 		ADCE5F7D28B9C79A00A42575 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				ADCE5F9528BDED8B00A42575 /* Ramen.swift */,
-				ADCE5F9728BDEE0A00A42575 /* RamensDataManager.swift */,
-				ADB3836A28C735A000D17272 /* CoreDataManager.swift */,
-				ADB3837428C8BC3900D17272 /* Ramens.json */,
+				AD33F9C028D04ED70001014E /* RamenModelCodable.swift */,
 				ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */,
 				ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */,
-				AD33F9C028D04ED70001014E /* RamenModelCodeable.swift */,
+				ADB3836A28C735A000D17272 /* CoreDataManager.swift */,
 				AD33F9C228D177FC0001014E /* DataBaseContainer.swift */,
 			);
 			path = Models;
@@ -243,14 +245,13 @@
 				ADB3836B28C735A000D17272 /* CoreDataManager.swift in Sources */,
 				ADB3836D28C7708700D17272 /* RamenSearchView.swift in Sources */,
 				ADCE5F9028BDA54400A42575 /* BookmarkPlusVC.swift in Sources */,
-				AD33F9C128D04ED70001014E /* RamenModelCodeable.swift in Sources */,
+				AD33F9C128D04ED70001014E /* RamenModelCodable.swift in Sources */,
 				AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */,
 				ADCE5F6528B9C76300A42575 /* AppDelegate.swift in Sources */,
 				ADB3836928C7353C00D17272 /* RamenData+CoreDataProperties.swift in Sources */,
 				ADCE5F8328B9DA4C00A42575 /* BookmarkTimerView.swift in Sources */,
 				ADCE5F8128B9D9AD00A42575 /* RandomVC.swift in Sources */,
 				ADB3837328C837FF00D17272 /* RamenSearchDetailVC.swift in Sources */,
-				ADCE5F9628BDED8B00A42575 /* Ramen.swift in Sources */,
 				ADCE5F6728B9C76300A42575 /* SceneDelegate.swift in Sources */,
 				ADB3836F28C770B600D17272 /* RamenSearchCollectionViewCell.swift in Sources */,
 				ADCE5F8A28B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift in Sources */,
@@ -258,7 +259,6 @@
 				ADCE5F6F28B9C76300A42575 /* RamenTimer.xcdatamodeld in Sources */,
 				ADCE5F8828B9E23800A42575 /* Constants.swift in Sources */,
 				ADB3837128C770CC00D17272 /* RamenSearchDetailView.swift in Sources */,
-				ADCE5F9828BDEE0A00A42575 /* RamensDataManager.swift in Sources */,
 				ADB3836828C7353C00D17272 /* RamenData+CoreDataClass.swift in Sources */,
 				ADCE5F9228BDA62400A42575 /* BookmarkPlusTableViewCell.swift in Sources */,
 			);

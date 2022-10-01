@@ -6,15 +6,14 @@
 //
 
 import UIKit
-
+import CoreData
 
 class RamenSearchVC: UIViewController {
 
-
-    let ramensDataManager = RamensDataManager()
+    var ramens: [RamenData]?
     lazy var searchController = UISearchController(searchResultsController: nil)
     var isFiltering = false
-    var searchedArray: [Ramen] = []
+    var searchedArray: [RamenData] = []
     
     private var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -41,7 +40,8 @@ class RamenSearchVC: UIViewController {
         setupCollectionViewConstraints()
         view.backgroundColor = .white
         self.navigationItem.searchController = searchController
-        
+        ramens = CoreDataManager.shared.getRamenListFromCoreData()
+//        print("search뷰", ramens)
     }
         
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -110,13 +110,8 @@ class RamenSearchVC: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-
-
-            
         ])
     }
-    
-
 }
 
 
@@ -128,7 +123,6 @@ extension RamenSearchVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
     }
-    
 }
 
 extension RamenSearchVC: UISearchBarDelegate {
@@ -141,18 +135,20 @@ extension RamenSearchVC: UISearchBarDelegate {
         searchBar.showsCancelButton = true
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let text = searchBar.text?.lowercased() else { return }
+        guard let text = searchBar.text?.lowercased(),
+        let ramens = ramens else { return }
         
-        self.searchedArray = ramensDataManager.getRamenArray().filter {
+        self.searchedArray = ramens.filter {
             $0.title?.localizedCaseInsensitiveContains(text) ?? false }
         self.collectionView.reloadData()
     }
         // 서치바에서 검색버튼을 눌렀을 때 호출
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        guard let text = searchBar.text?.lowercased() else { return }
+        guard let text = searchBar.text?.lowercased(),
+        let ramens = ramens else { return }
         
-        self.searchedArray = ramensDataManager.getRamenArray().filter {
+        self.searchedArray = ramens.filter {
             $0.title?.localizedCaseInsensitiveContains(text) ?? false }
     }
         
@@ -182,7 +178,7 @@ extension RamenSearchVC: UICollectionViewDelegate {
         if isFiltering {
             ramenSearchDetailVC.ramenData = searchedArray[indexPath.row]
         } else {
-            ramenSearchDetailVC.ramenData = ramensDataManager.getRamenArray()[indexPath.row]
+            ramenSearchDetailVC.ramenData = ramens?[indexPath.row]
         }
         self.present(ramenSearchDetailVC, animated: true)
         
@@ -199,17 +195,25 @@ extension RamenSearchVC: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return isFiltering ? searchedArray.count : ramensDataManager.getRamenArray().count
+        return isFiltering ? searchedArray.count : (ramens?.count ?? 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID.forRamenSearchView, for: indexPath) as! RamenSearchCollectionViewCell
         if !isFiltering {
-            cell.imageView.image = ramensDataManager.getRamenArray()[indexPath.row].image
-            
+            if let ramens = self.ramens {
+                let cellModel = ramens[indexPath.row]
+                if let title = cellModel.title {
+                    cell.imageView.image = UIImage(named: "\(title)")
+                }
+            }
         } else {
-            cell.imageView.image = self.searchedArray[indexPath.row].image
-        }
+
+                let cellModel = self.searchedArray[indexPath.row]
+                if let title = cellModel.title {
+                    cell.imageView.image = UIImage(named: "\(title)")
+                }
+            }
         
 
         return cell

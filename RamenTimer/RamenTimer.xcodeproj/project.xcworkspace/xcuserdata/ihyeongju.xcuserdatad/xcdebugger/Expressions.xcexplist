@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "BookmarkVC.collectionView(_:numberOfItemsInSection:):BookmarkVC.swift">
+      </ContextState>
+      <ContextState
+         contextName = "SceneDelegate.scene(_:willConnectTo:options:):SceneDelegate.swift">
+      </ContextState>
+      <ContextState
+         contextName = "BookmarkVC.viewDidLoad():BookmarkVC.swift">
+      </ContextState>
+      <ContextState
+         contextName = "BookmarkVC.collectionView(_:cellForItemAt:):BookmarkVC.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cellModel.title">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

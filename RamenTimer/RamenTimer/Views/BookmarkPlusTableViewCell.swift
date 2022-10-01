@@ -16,6 +16,8 @@ protocol CellButtonActionDelegate: AnyObject {
 
 class BookmarkPlusTableViewCell: UITableViewCell {
 
+    // MARK: - Properties
+    
     var bookmarButtonAction: (() -> ())?
     var cellDelegate: CellButtonActionDelegate?
     
@@ -103,14 +105,14 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         return sv
     }()
     
+    // MARK: - LifeCycle
     
     // 커스텀 셀 작성시 삽입
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
 //        self.bookmarkButton.isUserInteractionEnabled = true
-//        self.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
-        self.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped2), for: .touchUpInside)
+        self.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
         
     }
     
@@ -124,7 +126,9 @@ class BookmarkPlusTableViewCell: UITableViewCell {
 //
 //    }
     
-    @objc func bookmarkButtonTapped2() {
+    // MARK: - Actions
+    
+    @objc func bookmarkButtonTapped() {
         cellDelegate?.bookmarkButtonTapped()
         if bookmarkButton.image(for: .normal) == UIImage(systemName: ImageSystemNames.star) {
             bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.starFill), for: .normal)
@@ -132,6 +136,8 @@ class BookmarkPlusTableViewCell: UITableViewCell {
             bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
         }
     }
+    
+    // MARK: - Helpers
     
     override func awakeFromNib() {
         super.awakeFromNib()

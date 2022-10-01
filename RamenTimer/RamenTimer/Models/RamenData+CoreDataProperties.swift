@@ -18,12 +18,12 @@ extension RamenData {
 
     @NSManaged public var bookmark: Bool
     @NSManaged public var memo: String?
-    @NSManaged public var number: Int16
-    @NSManaged public var settingTime: Int16
-    @NSManaged public var suggestedTime: Int16
+    @NSManaged public var number: String?
+    @NSManaged public var settingTime: String?
+    @NSManaged public var suggestedTime: String?
     @NSManaged public var title: String?
-    @NSManaged public var water: Int16
-    @NSManaged public var spicyLevel: Int16
+    @NSManaged public var water: String?
+    @NSManaged public var spicyLevel: String?
     @NSManaged public var brand: String?
     @NSManaged public var color: String?
 

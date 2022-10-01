@@ -73,7 +73,7 @@ class RamenSearchDetailView: UIView {
         button.imageView?.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-
+        button.tintColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
         return button
     }()
     
@@ -84,7 +84,7 @@ class RamenSearchDetailView: UIView {
         slider.value = slider.maximumValue
         slider.isContinuous = true
         slider.maximumTrackTintColor = .lightGray
-        slider.minimumTrackTintColor = .systemBlue
+        slider.minimumTrackTintColor = .darkGray
         slider.backgroundColor = .clear
         return slider
     }()
@@ -109,7 +109,6 @@ class RamenSearchDetailView: UIView {
         label.text = "권장물양 : "
         label.backgroundColor = .clear
         label.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
-//        label.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .horizontal)
 
         label.frame.size.width = 30
         return label
@@ -117,10 +116,10 @@ class RamenSearchDetailView: UIView {
     
     lazy var suggestedWaterLabel: UILabel = {
         let label = UILabel()
-        label.text = "500 ml"
-        label.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
+        label.text = "0 ml"
+
         label.textAlignment = .right
-//        label.setContentCompressionResistancePriority(UILayoutPriority.defaultHigh, for: .horizontal)
+
 
         return label
     }()
@@ -159,22 +158,21 @@ class RamenSearchDetailView: UIView {
     
     lazy var memoTextView: UITextView = {
        let textView = UITextView()
-        textView.frame.size.height = 50
-        textView.backgroundColor = .systemBlue
+        textView.frame.size.height = 150
+        textView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
         textView.text = ""
-
+        textView.setContentHuggingPriority(.defaultLow, for: .vertical)
         return textView
     }()
     
-    lazy var emptyView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-
-        return view
-    }()
+//    lazy var emptyView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .clear
+//        return view
+//    }()
     
     lazy var mainStackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, timeSlider, stackViewForButton, totalLabelStackView, memoTextView, emptyView])
+       let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, timeSlider, stackViewForButton, totalLabelStackView, memoTextView, memoSavebutton])
         stackView.spacing = 20
         stackView.alignment = .center
         stackView.distribution = .fill
@@ -185,7 +183,18 @@ class RamenSearchDetailView: UIView {
         return stackView
     }()
     
+    lazy var memoSavebutton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("메모 저장", for: .normal)
+        button.setTitleColor(#colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1), for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+//        button.layer.borderColor =
+//        button.layer.borderWidth = 3
+        button.layer.cornerRadius = 10
+        button.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
 
+        return button
+    }()
 
     
     
@@ -194,9 +203,8 @@ class RamenSearchDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         makeUI()
+        self.backgroundColor = .white
         
-//        clearTextField.delegate = self
-
     }
     
     required init?(coder: NSCoder) {
@@ -226,55 +234,77 @@ class RamenSearchDetailView: UIView {
         totalLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         memoTextView.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.translatesAutoresizingMaskIntoConstraints = false
+//        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        memoSavebutton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             
-            mainStackView.topAnchor.constraint(equalTo: topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            titleLabel.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
-            titleLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40),
+            mainStackView.topAnchor.constraint(equalTo: topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -80),
             
-            timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+
+
+            titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 20),
+            
+//            timeLabel.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 10),
+            
             timeLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             timeLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
             timeLabel.heightAnchor.constraint(equalToConstant: 120),
-
-            
+//            timeLabel.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 20),
             
             clearTextField.topAnchor.constraint(equalTo: timeLabel.topAnchor),
             clearTextField.bottomAnchor.constraint(equalTo: timeLabel.bottomAnchor),
             clearTextField.leadingAnchor.constraint(equalTo: timeLabel.leadingAnchor),
             clearTextField.trailingAnchor.constraint(equalTo: timeLabel.trailingAnchor),
+        
             
-
+             
+             timeSlider.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
+             timeSlider.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
+//             timeSlider.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: -25),
+ //            timeSlider.heightAnchor.constraint(equalToConstant: 30),
+            
+           
+            
             stackViewForButton.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             stackViewForButton.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            stackViewForButton.heightAnchor.constraint(equalToConstant: 80),
+            stackViewForButton.heightAnchor.constraint(equalToConstant: 70),
+            
+//            stackViewForButton.heightAnchor.constraint(equalToConstant: 80),
             playButton.widthAnchor.constraint(equalToConstant: 70),
-            playButton.heightAnchor.constraint(equalToConstant: 70),
+//            playButton.heightAnchor.constraint(equalToConstant: 80),
 
-            timeSlider.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
-            timeSlider.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            timeSlider.heightAnchor.constraint(equalToConstant: 30),
+            
+
 
             totalLabelStackView.topAnchor.constraint(equalTo: stackViewForButton.bottomAnchor, constant: 10),
             totalLabelStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             totalLabelStackView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            totalLabelStackView.heightAnchor.constraint(equalToConstant: 50),
+            totalLabelStackView.heightAnchor.constraint(equalToConstant: 30),
+//            totalLabelStackView.heightAnchor.constraint(equalToConstant: 50),
 
-            memoTextView.heightAnchor.constraint(equalToConstant: 150),
+             
+            
+//            memoTextView.heightAnchor.constraint(equalToConstant: 150),
             memoTextView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             memoTextView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            memoTextView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -50),
+//            memoTextView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -50),
+//            memoTextView.topAnchor.constraint(equalTo: totalLabelStackView.bottomAnchor, constant: -50),
            
-            emptyView.topAnchor.constraint(equalTo: memoTextView.bottomAnchor, constant: 20)
+            
+            memoSavebutton.heightAnchor.constraint(equalToConstant: 30),
+            memoSavebutton.widthAnchor.constraint(equalToConstant: 100),
+//            memoSavebutton.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            memoSavebutton.topAnchor.constraint(equalTo: memoTextView.bottomAnchor, constant: 10),
+            
+//            emptyView.topAnchor.constraint(equalTo: memoSavebutton.bottomAnchor, constant: 20),
+//            emptyView.heightAnchor.constraint(equalToConstant: 20),
+//            emptyView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor)
 
+            
         ])
     }
     

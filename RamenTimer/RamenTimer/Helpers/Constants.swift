@@ -37,3 +37,9 @@ public struct AlarmSound {
     
     private init() {}
 }
+
+public struct TextViewPlaceholder {
+    static let PleaseWrite = "메모하실 내용이 있으면 입력하세요."
+    
+    private init() {}
+}
