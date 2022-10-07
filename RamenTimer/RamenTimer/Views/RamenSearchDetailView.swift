@@ -10,11 +10,6 @@ import CoreData
 
 class RamenSearchDetailView: UIView {
     
-    
-    
-    
-
-    
     // MARK: - 뷰에 표시할 인스턴스들
     
     lazy var titleLabel: UILabel = {
@@ -29,7 +24,7 @@ class RamenSearchDetailView: UIView {
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
-        label.font = UIFont.systemFont(ofSize: 120)
+        label.font = UIFont.boldSystemFont(ofSize: 100)
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
@@ -37,10 +32,11 @@ class RamenSearchDetailView: UIView {
     }()
     
     lazy var clearTextField: UITextField = {
-       let tf = UITextField()
+       let tf = CustomTextfield()
         tf.backgroundColor = .clear
         //커서 깜박이는거 지워야하나?
         tf.tintColor = .clear
+
         
         return tf
         
@@ -162,6 +158,8 @@ class RamenSearchDetailView: UIView {
         textView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
         textView.text = ""
         textView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        textView.autocorrectionType = .no
+        textView.autocapitalizationType = .none
         return textView
     }()
     
@@ -173,7 +171,7 @@ class RamenSearchDetailView: UIView {
     
     lazy var mainStackView: UIStackView = {
        let stackView = UIStackView(arrangedSubviews: [titleLabel, timeLabel, timeSlider, stackViewForButton, totalLabelStackView, memoTextView, memoSavebutton])
-        stackView.spacing = 20
+        stackView.spacing = 10
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.axis = .vertical
@@ -191,7 +189,7 @@ class RamenSearchDetailView: UIView {
 //        button.layer.borderColor =
 //        button.layer.borderWidth = 3
         button.layer.cornerRadius = 10
-        button.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        button.backgroundColor = Colors.customlightGrey
 
         return button
     }()
@@ -234,7 +232,6 @@ class RamenSearchDetailView: UIView {
         totalLabelStackView.translatesAutoresizingMaskIntoConstraints = false
         memoTextView.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
-//        emptyView.translatesAutoresizingMaskIntoConstraints = false
         memoSavebutton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -242,13 +239,12 @@ class RamenSearchDetailView: UIView {
             mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -80),
+            mainStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -70),
             
 
 
-            titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 20),
-            
-//            timeLabel.topAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
+
             
             timeLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             timeLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
@@ -320,12 +316,11 @@ class RamenSearchDetailView: UIView {
 }
 
 extension RamenSearchDetailView: UITextFieldDelegate {
-    
+
 }
     
     
-    
-    
+
     
 
 

@@ -14,7 +14,7 @@ final class BookmarkTimerView: UIView {
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         label.text = "00:00"
-        label.font = UIFont.systemFont(ofSize: 120)
+        label.font = UIFont.boldSystemFont(ofSize: 100)
         label.backgroundColor = .clear
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
@@ -22,11 +22,9 @@ final class BookmarkTimerView: UIView {
     }()
     
     lazy var clearTextField: UITextField = {
-       let tf = UITextField()
+       let tf = CustomTextfield()
         tf.backgroundColor = .clear
-        //커서 깜박이는거 지워야하나?
         tf.tintColor = .clear
-        
         return tf
         
     }()
@@ -58,7 +56,7 @@ final class BookmarkTimerView: UIView {
         button.imageView?.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
-        button.tintColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
+        button.tintColor = Colors.customPink
         return button
     }()
     
@@ -71,6 +69,8 @@ final class BookmarkTimerView: UIView {
         slider.maximumTrackTintColor = .lightGray
         slider.minimumTrackTintColor = .darkGray
         slider.backgroundColor = .clear
+        slider.thumbTintColor = .clear
+        slider.isEnabled = false
         return slider
     }()
     
@@ -136,9 +136,11 @@ final class BookmarkTimerView: UIView {
     
     lazy var memoTextView: UITextView = {
        let textView = UITextView()
-        textView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
+        textView.backgroundColor = Colors.customYellow
         textView.text = ""
-        textView.setContentHuggingPriority(.defaultLow, for: .vertical)
+//        textView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        textView.autocorrectionType = .no
+        textView.autocapitalizationType = .none
         return textView
     }()
     
@@ -149,7 +151,7 @@ final class BookmarkTimerView: UIView {
 //    }()
     
     lazy var mainStackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [timeLabel, timeSlider, stackViewForButton, totalLabelStackView, memoTextView, memoSavebutton])
+       let stackView = UIStackView(arrangedSubviews: [timeLabel, timeSlider, playButton, totalLabelStackView, memoTextView, memoSavebutton])
         stackView.spacing = 10
         stackView.alignment = .center
         stackView.distribution = .fillProportionally
@@ -167,7 +169,7 @@ final class BookmarkTimerView: UIView {
 //        button.layer.borderColor =
 //        button.layer.borderWidth = 3
         button.layer.cornerRadius = 10
-        button.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        button.backgroundColor = Colors.customlightGrey
 
         return button
     }()
@@ -201,7 +203,7 @@ final class BookmarkTimerView: UIView {
         playButton.translatesAutoresizingMaskIntoConstraints = false
         viewForButtonLeft.translatesAutoresizingMaskIntoConstraints = false
         viewForButtonRight.translatesAutoresizingMaskIntoConstraints = false
-        stackViewForButton.translatesAutoresizingMaskIntoConstraints = false
+       // stackViewForButton.translatesAutoresizingMaskIntoConstraints = false
         timeSlider.translatesAutoresizingMaskIntoConstraints = false
         cellSugestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         suggestedTimeLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -226,8 +228,8 @@ final class BookmarkTimerView: UIView {
             
             timeLabel.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             timeLabel.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-            timeLabel.heightAnchor.constraint(equalToConstant: 120),
-            timeLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 20),
+            timeLabel.heightAnchor.constraint(equalToConstant: 100),
+            timeLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
             
             clearTextField.topAnchor.constraint(equalTo: timeLabel.topAnchor),
             clearTextField.bottomAnchor.constraint(equalTo: timeLabel.bottomAnchor),
@@ -239,13 +241,14 @@ final class BookmarkTimerView: UIView {
              timeSlider.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
              timeSlider.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
 //             timeSlider.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: -25),
- //            timeSlider.heightAnchor.constraint(equalToConstant: 30),
+             timeSlider.heightAnchor.constraint(equalToConstant: 30),
             
            
             
-            stackViewForButton.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
-            stackViewForButton.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
+//            stackViewForButton.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
+//            stackViewForButton.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
 //            stackViewForButton.heightAnchor.constraint(equalToConstant: 80),
+            playButton.topAnchor.constraint(equalTo: timeSlider.bottomAnchor),
             playButton.widthAnchor.constraint(equalToConstant: 80),
             playButton.heightAnchor.constraint(equalToConstant: 80),
 
@@ -255,13 +258,14 @@ final class BookmarkTimerView: UIView {
             totalLabelStackView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 0),
             totalLabelStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             totalLabelStackView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
-//            totalLabelStackView.heightAnchor.constraint(equalToConstant: 50),
+            totalLabelStackView.heightAnchor.constraint(equalToConstant: 50),
 
              
             
-            memoTextView.heightAnchor.constraint(equalToConstant: 150),
+            memoTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 150),
             memoTextView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor, constant: 30),
             memoTextView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -30),
+//            memoTextView.topAnchor.constraint(equalTo: totalLabelStackView.bottomAnchor, constant: 0),
 //            memoTextView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: -50),
 //            memoTextView.topAnchor.constraint(equalTo: totalLabelStackView.bottomAnchor, constant: -50),
            
@@ -285,7 +289,5 @@ final class BookmarkTimerView: UIView {
 }
 
 extension BookmarkTimerView: UITextFieldDelegate {
-    //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-    //        return false
-    //    }
+
 }

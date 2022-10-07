@@ -13,15 +13,7 @@ class BookmarkPlusVC: UIViewController  {
     // MARK: -  Properties
     let tableView = UITableView()
     var ramens: [RamenData]?
-    var searchedArray: [RamenData] = []
-    var bookmarkedRamens: [RamenData]?
-    var isFiltering: Bool = false {
-        didSet {
-            updateBookmarkedRamenArray()
-        }
-    }
-    var isFilteringStart: Bool = false
-    var ramenForBookmarkButton: RamenData?
+
     
     // MARK: - LifeCycle
     
@@ -35,19 +27,22 @@ class BookmarkPlusVC: UIViewController  {
         tableView.dragInteractionEnabled = true
         tableView.dragDelegate = self
         tableView.dropDelegate = self
-        ramens = CoreDataManager.shared.getRamenListFromCoreData()
+        updateBookmarkedRamenArray()
+        if let ramens = ramens {
+            print("DEBUG: maxRamen \(ramens.max(by: { $0.order < $1.order }))")
 
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        updateBookmarkedRamenArray()
-    }
     
     // MARK: - Helpers
     
     func updateBookmarkedRamenArray() {
-        self.bookmarkedRamens = self.ramens?.filter( { $0.bookmark == true })
-
+        ramens = getRamensData().filter({ $0.bookmark == true })
+    }
+    
+    func getRamensData() ->[RamenData] {
+        return CoreDataManager.shared.getRamenListFromCoreData()
     }
     
     func setupSearchbar() {
@@ -59,26 +54,13 @@ class BookmarkPlusVC: UIViewController  {
         
     func setupNavigationItem() {
         navigationItem.largeTitleDisplayMode = .never
-
-
     }
     
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(BookmarkPlusTableViewCell.self, forCellReuseIdentifier: cellID.forTableView)
-    }
-    
-    func setupBookmarkButton(ramens: [RamenData]?, indexPath: IndexPath, cell: BookmarkPlusTableViewCell) {
-        if let ramens = ramens {
-            if ramens[indexPath.row].bookmark == true {
-                cell.bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.starFill), for: .normal)
-            } else {
-                cell.bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
-            }
-        }
-        
-        
+        tableView.allowsSelection = false
     }
 
     func setupTableViewConstraints() {
@@ -91,113 +73,29 @@ class BookmarkPlusVC: UIViewController  {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
-    func setupTimerLabel(ramens: [RamenData]? ,indexPath: IndexPath, cell: BookmarkPlusTableViewCell) {
-        if let ramens = ramens {
-            let cellModel = ramens[indexPath.row]
-            
-            guard let settingTimer = cellModel.settingTime,
-                  let intSettingTimer = Int(settingTimer) else { return }
-            let minutes: Int = intSettingTimer / 60
-            let seconds: Int = intSettingTimer - (minutes * 60)
-            let mins = minutes
-            let secs = seconds
-            
-            if mins == 0 && secs == 0 {
-                cell.timeLabel.text = "00:00"
-            } else if secs < 10 && mins < 10 {
-                cell.timeLabel.text = "0\(mins):0\(secs)"
-            } else if mins < 10 {
-                cell.timeLabel.text = "0\(mins):\(secs)"
-            } else if mins == 10 && secs < 10 {
-                cell.timeLabel.text = "\(mins):0\(secs)"
-            } else {
-                cell.timeLabel.text = "\(mins):\(secs)"
-            }        }
-    }
-    
-    
-    // MARK: - Actions
-
-    @objc func bookmarkButtonTappedForBookmarked(_ sender: UIButton) {
-        let contentView = sender.superview?.superview
-        guard let cell = contentView?.superview as? UITableViewCell else { return }
-        let indexPath = tableView.indexPath(for: cell)
-        guard let bookmarkedRamens = bookmarkedRamens,
-              let index = indexPath else { return }
-
-        bookmarkedRamens[index.row].bookmark = !bookmarkedRamens[index.row].bookmark
-        print("DEBUG: 북마크드라멘즈에서 눌려진 북마크 셀 \n \(bookmarkedRamens[index.row])")
-        CoreDataManager.shared.updateRamenData(newRamenData: bookmarkedRamens[index.row], completion: {
-        })
         
-
-    }
-    
-    @objc func bookmarkButtonTappedForSearched(_ sender: UIButton) {
-        let contentView = sender.superview?.superview
-        guard let cell = contentView?.superview as? UITableViewCell else { return }
-        let indexPath = tableView.indexPath(for: cell)
-        guard let index = indexPath else { return }
-
-        searchedArray[index.row].bookmark = !searchedArray[index.row].bookmark
-        print("DEBUG: 서치라멘즈에서 눌려진 북마크 셀 \n \(searchedArray[index.row])")
-        CoreDataManager.shared.updateRamenData(newRamenData: searchedArray[index.row], completion: {
-        })
         
-    }
-
+    
 }
 
 // MARK: - tableView dataSource extension
 extension BookmarkPlusVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFilteringStart == true {
-            return ramens?.count ?? 0
-        } else {
-            return self.isFiltering ? searchedArray.count : (bookmarkedRamens?.count ?? 0)
-
-        }
-        
+        return ramens?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID.forTableView) as! BookmarkPlusTableViewCell
         
-        if self.isFilteringStart == true && self.isFiltering == false {
-            if let ramens = ramens,
-               let imageTitle = ramens[indexPath.row].title {
-                cell.ramenImage.image = UIImage(named: imageTitle)
-                cell.ramenTitleLabel.text = imageTitle
-                setupTimerLabel(ramens: ramens ,indexPath: indexPath, cell: cell)
-                setupBookmarkButton(ramens: ramens, indexPath: indexPath, cell: cell)
-            }
-        } else if self.isFilteringStart == false && self.isFiltering == true {
-            
-            if let imageTitle = searchedArray[indexPath.row].title {
-                cell.ramenImage.image = UIImage(named: imageTitle)
-                cell.ramenTitleLabel.text = imageTitle
-            }
-            setupTimerLabel(ramens: searchedArray , indexPath: indexPath, cell: cell)
-            setupBookmarkButton(ramens: searchedArray, indexPath: indexPath, cell: cell)
-            
-            cell.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTappedForSearched(_:)), for: .touchUpInside)
-            cell.cellDelegate = self
-        } else if self.isFilteringStart == false && self.isFiltering == false {
-            if let bookmarkedRamens = bookmarkedRamens,
-               let imageTitle = bookmarkedRamens[indexPath.row].title {
-                cell.ramenImage.image = UIImage(named: imageTitle)
-                cell.ramenTitleLabel.text = imageTitle
-                setupTimerLabel(ramens: bookmarkedRamens ,indexPath: indexPath, cell: cell)
-                setupBookmarkButton(ramens: bookmarkedRamens, indexPath: indexPath, cell: cell)
-//                cell.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTappedForBookmarked(_:)), for: .touchUpInside)
-            }
-            cell.cellDelegate = self
-        }
+        guard let ramens = self.ramens else { return BookmarkPlusTableViewCell() }
+        cell.updateRamenCell(ramenData: ramens[indexPath.row], isDragInteractionEnabled: tableView.dragInteractionEnabled)
+        cell.cellDelegate = self
         
         return cell
     }
 
+
+    
 }
 
 // MARK: - UITableViewDelegate
@@ -206,13 +104,10 @@ extension BookmarkPlusVC: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
 
-        
-        if isFiltering == false {
             let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { action, view, completionHandler in
-                guard let bookmarkedRamens = self.bookmarkedRamens else { return }
-                let ramen = bookmarkedRamens[indexPath.row]
+                guard let ramens = self.ramens else { return }
+                let ramen = ramens[indexPath.row]
                 ramen.bookmark = false
                 CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
                     print("삭제성공")
@@ -227,8 +122,8 @@ extension BookmarkPlusVC: UITableViewDelegate {
             let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction])
             swipeActions.performsFirstActionWithFullSwipe = false
             return swipeActions
-        }
-        return nil
+                
+        
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -253,19 +148,27 @@ extension BookmarkPlusVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
-
-            guard let bookmarked = bookmarkedRamens else { return }
-            let moveCell = bookmarked[sourceIndexPath.row]
+        
+        guard let ramens = ramens else { return }
+        
+        if sourceIndexPath.row > destinationIndexPath.row {
+            for i in destinationIndexPath.row..<sourceIndexPath.row {
+                ramens[i].setValue(i+1, forKey: "order")
+            }
             
+            ramens[sourceIndexPath.row].setValue(destinationIndexPath.row, forKey: "order")
+        }
+        
+        if sourceIndexPath.row < destinationIndexPath.row {
+            for i in sourceIndexPath.row + 1...destinationIndexPath.row {
+                ramens[i].setValue(i-1, forKey: "order")
+            }
             
+            ramens[sourceIndexPath.row].setValue(destinationIndexPath.row, forKey: "order")
+        }
 
+        print(ramens)
 
-        
-        
-        
-        // 원래 getRamenArray()로 데이터를 받는데 함수로 받으면 mutate가 안된다고 함. 아놔.
-//        CoreDataManager.shared.getRamenListFromCoreData().remove(at: sourceIndexPath.row)
-//        self.ramensDataManager.ramens.insert(moveCell, at: destinationIndexPath.row)
     }
 
     
@@ -297,78 +200,84 @@ extension BookmarkPlusVC: UITableViewDropDelegate {
 extension BookmarkPlusVC: UISearchBarDelegate {
     // 서치바에서 검색을 시작할 때 호출
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        self.isFilteringStart = true
-        self.isFiltering = false
-        
+        getRamenDataDependingText(searchBar: searchBar)
         self.tableView.reloadData()
         navigationItem.rightBarButtonItem = .none
         searchBar.showsCancelButton = true
-    }
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.isFilteringStart = false
-        self.isFiltering = true
-
-        guard let text = searchBar.text?.lowercased(),
-              let ramens = ramens else { return }
+        tableView.dragInteractionEnabled = false
         
-        self.searchedArray = ramens.filter {
-            $0.title?.localizedCaseInsensitiveContains(text) ?? false }
-        print("DEBUG: 검색한 데이터들 \(searchedArray)")
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        getRamenDataDependingText(searchBar: searchBar)
+        self.tableView.reloadData()
+        tableView.dragInteractionEnabled = false
+
+    }
+    
+    // 서치바에서 검색버튼을 눌렀을 때 호출
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        getRamenDataDependingText(searchBar: searchBar)
+        self.tableView.reloadData()
+        searchBar.resignFirstResponder()
+        tableView.dragInteractionEnabled = false
+
+    }
+    
+    // 서치바에서 취소 버튼을 눌렀을 때 호출
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+
+        searchBar.text = ""
+        updateBookmarkedRamenArray()
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
+        self.tableView.reloadData()
+        tableView.dragInteractionEnabled = true
+
+    }
+    
+    // 서치바 검색이 끝났을 때 호출
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.tableView.reloadData()
     }
-        // 서치바에서 검색버튼을 눌렀을 때 호출
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        guard let text = searchBar.text?.lowercased(),
-              let ramens = ramens else { return }
-        
-        self.searchedArray = ramens.filter {
-            $0.title?.localizedCaseInsensitiveContains(text) ?? false }
+    
+    func getRamenDataDependingText(searchBar: UISearchBar) {
+        if searchBar.text!.isEmpty {
+            ramens = getRamensData()
+        } else {
+            ramens = getRamensData().filter({ $0.title!.contains(searchBar.text!) })
+        }
     }
-        
-        // 서치바에서 취소 버튼을 눌렀을 때 호출
-        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            searchBar.text = ""
-            searchBar.resignFirstResponder()
-            self.isFiltering = false
-//            navigationItem.rightBarButtonItem = self.editButtonItem
-            searchBar.showsCancelButton = false
-            self.tableView.reloadData()
-        }
-        // 서치바 검색이 끝났을 때 호출
-        func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-
-            self.tableView.reloadData()
-            
-        }
 }
-
-
 
 extension BookmarkPlusVC: CellButtonActionDelegate {
-    func bookmarkButtonTapped() {
-        print("눌렸당")
-        
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.tableView.reloadData()
+    func bookmarkButtonTapped(_ id: String) {
+        if let ramens = ramens,
+           let index = ramens.firstIndex(where: { $0.number == id }) {
+            ramens[index].bookmark.toggle()
+            
+            CoreDataManager.shared.updateRamenData(newRamenData: ramens[index]) {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.ramens = ramens
+                    self.tableView.reloadData()
+//                    self.updateBookmarkedRamenArray()
+
+                    
+                    // 서치바가 작동중일때랑 아닐때?
+
+                    
+                }
             }
+            // 새로 추가되는 라면 리스트 하단으로 이동하려 했던 코드...
+//            if ramens[index].bookmark == true {
+//                guard let maxRamenOrder = ramens.max(by: { $0.order < $1.order} )?.order else { return }
+//                ramens[index].order += maxRamenOrder + 1
+//                print("DEBUG: total Ramens \(ramens)")
+//            }
+        }
     }
-    
-    
-//    @objc func bookmarkButtonTappedForBookmarked(_ sender: UIButton) {
-//        let contentView = sender.superview?.superview
-//        guard let cell = contentView?.superview as? UITableViewCell else { return }
-//        let index = tableView.indexPath(for: cell)
-//        guard let bookmarkedRamens = bookmarkedRamens,
-//              let index = index else { return }
-//
-//        bookmarkedRamens[index.row].bookmark = !bookmarkedRamens[index.row].bookmark
-//        print("DEBUG: 북마크드라멘즈에서 눌려진 북마크 셀 \n \(bookmarkedRamens[index.row])")
-//        CoreDataManager.shared.updateRamenData(newRamenData: bookmarkedRamens[index.row], completion: {
-//        })
-//
-    
-    
-    
 }
+
+
+

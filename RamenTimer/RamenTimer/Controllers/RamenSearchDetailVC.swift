@@ -35,12 +35,12 @@ class RamenSearchDetailVC: UIViewController {
     
     var settedTime: Int?
     
+
     // MARK: - viewDidLoad
     
     override func viewDidLoad() {
         self.view = ramenSearchDetailVeiw
         setupTitleLabel()
-        updateViewConstraints()
         setupTimerLabel()
         setupTimeSlider()
         setupPlayButtonForCellSelect()
@@ -48,6 +48,7 @@ class RamenSearchDetailVC: UIViewController {
         setupTimerTextView()
         showPickerView()
         setupSaveButton()
+        setupPlayButton()
         
     }
 
@@ -64,13 +65,7 @@ class RamenSearchDetailVC: UIViewController {
 
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        self.addKeyboardNotifications()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        self.removeKeyboardNotifications()
-    }
+
     
     // MARK: - 타이틀 레이블 셋업
     func setupTitleLabel() {
@@ -229,6 +224,7 @@ class RamenSearchDetailVC: UIViewController {
     }
     
     @objc func saveMemoTapped() {
+        self.view.endEditing(true)
         if ramenSearchDetailVeiw.memoTextView.text == TextViewPlaceholder.PleaseWrite {
             return
         } else if ramenSearchDetailVeiw.memoTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -247,7 +243,7 @@ class RamenSearchDetailVC: UIViewController {
             print("DEBUG: ramen 메모 변경: \(ramen)")
             let alert = UIAlertController(title: "메모 변경", message: "메모가 변경되었습니다.", preferredStyle: .alert)
             let check = UIAlertAction(title: "OK", style: .default) { _ in
-                
+                self.resignFirstResponder()
             }
             alert.addAction(check)
             self.present(alert, animated: true)
@@ -287,7 +283,7 @@ class RamenSearchDetailVC: UIViewController {
     }
     
     // MARK: - 키보드 화면 애니메이션
-    
+    /*
 //    var viewYValue = CGFloat(0)
     
     func addKeyboardNotifications(){
@@ -319,6 +315,8 @@ class RamenSearchDetailVC: UIViewController {
         }
 
     }
+     
+     */
     
     // MARK: - pickerView 설정
      func showPickerView() {
@@ -351,8 +349,15 @@ class RamenSearchDetailVC: UIViewController {
             
             let alert = UIAlertController(title: "시간 변경", message: "타이머 시간이 변경되었습니다.", preferredStyle: .alert)
             let check = UIAlertAction(title: "OK", style: .default) { _ in
+                
+                self.setupTimerLabel()
+                self.setupTimeSlider()
+                self.setupTimerTextView()
+                
                 // 피커뷰 종료 -> dismiss 대신 endEditing으로
                 self.view.endEditing(true)
+                
+                
             }
             alert.addAction(check)
             self.present(alert, animated: true)
@@ -447,57 +452,3 @@ extension RamenSearchDetailVC: UIPickerViewDataSource, UIPickerViewDelegate {
 extension RamenSearchDetailVC: UITextFieldDelegate {
     
 }
-
-
-
-// half modal view code
-//import UIKit
-//
-//class RamenSearchDetailVC: UIPresentationController {
-//
-//    let blurEffectView: UIVisualEffectView!
-//    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
-//    var check: Bool = false
-//
-//    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
-//        let blurEffect = UIBlurEffect(style: .dark)
-//        blurEffectView = UIVisualEffectView(effect: blurEffect)
-//        super.init(presentedViewController: presentedViewController, presenting: presentedViewController)
-//        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController))
-//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        self.blurEffectView.isUserInteractionEnabled = true
-//        self.blurEffectView.addGestureRecognizer(tapGestureRecognizer)
-//    }
-//
-//    override var frameOfPresentedViewInContainerView: CGRect {
-//        CGRect(origin: CGPoint(x: 0,
-//                               y: self.containerView!.frame.height * 181 / 800),
-//               size: CGSize(width: self.containerView!.frame.width,
-//                            height: self.containerView!.frame.height * 619 / 800))
-//    }
-//
-//    // 모달이 올라갈 때 뒤에 있는 배경을 검은색 처리해주는 용도
-//    override func presentationTransitionWillBegin() {
-//        self.blurEffectView.alpha = 0
-//        self.containerView!.addSubview(blurEffectView)
-//        self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in self.blurEffectView.alpha = 0.7},
-//                                                                    completion: nil)
-//    }
-//
-//    // 모달이 없어질 때 검은색 배경을 슈퍼뷰에서 제거
-//    override func dismissalTransitionWillBegin() {
-//        self.presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in self.blurEffectView.alpha = 0},
-//                                                                    completion: { _ in self.blurEffectView.removeFromSuperview()})
-//    }
-//
-//    // 모달의 크기가 조절됐을 때 호출되는 함수
-//    override func containerViewDidLayoutSubviews() {
-//        super.containerViewDidLayoutSubviews()
-//        blurEffectView.frame = containerView!.bounds
-//        self.presentedView?.layer.cornerRadius = 15
-//    }
-//
-//    @objc func dismissController() {
-//        self.presentedViewController.dismiss(animated: true, completion: nil)
-//    }
-//}

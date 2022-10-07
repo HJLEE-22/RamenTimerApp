@@ -13,6 +13,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var ramenForDecoder: [RamenModelCodable]?
 
+    func templateNavigationController(unselectedImage: UIImage, selectedImage: UIImage, rootViewController: UIViewController) ->UINavigationController {
+        let nav = UINavigationController(rootViewController: rootViewController)
+        nav.tabBarItem.image = unselectedImage
+        nav.tabBarItem.selectedImage = selectedImage
+        nav.navigationBar.tintColor = .black
+        return nav
+    }
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
 
@@ -39,15 +47,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        tabBarVC.setViewControllers([vc1, vc2, vc3], animated: false)
         tabBarVC.modalPresentationStyle = .fullScreen
         tabBarVC.tabBar.backgroundColor = .white
-        tabBarVC.tabBar.barTintColor = .white
+        tabBarVC.tabBar.tintColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
 
         
         // 탭바 이미지 설정 (이미지는 애플이 제공하는 것으로 사용)
         guard let items = tabBarVC.tabBar.items else { return }
-        items[0].image = UIImage(systemName: "star.circle") // 선택될땐 star.square.fill
-        items[1].image = UIImage(systemName: "magnifyingglass.circle") // magnifyingglass.square.fill
+        
+        items[0].image = UIImage(systemName: "star.circle")
+        items[0].selectedImage = UIImage(systemName: "star.circle.fill")
+        items[1].image = UIImage(systemName: "magnifyingglass.circle")
+        items[1].selectedImage = UIImage(systemName: "magnifyingglass.circle.fill")
 //        items[2].image = UIImage(systemName: "die.face.5") // di.face.5.fill
-
             
         // 기본루트뷰를 탭바컨트롤러로 설정⭐️⭐️⭐️
         window?.rootViewController = tabBarVC
@@ -60,13 +70,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         
         let existedData = CoreDataManager.shared.getRamenListFromCoreData()
+
         
-        let fileLocation = "/Users/ihyeongju/Desktop/RamenTimerApp/RamenTimer/RamenTimer/Resources/Ramens.json"
+        let fileName = "RamensList"
+        let fileType = "json"
+        let jsonPath = Bundle.main.path(forResource: fileName, ofType: fileType)
         
-        let data = loadJsonData(fileLocation: fileLocation)
+        let data = loadJsonData(fileLocation: jsonPath ?? "" )
         
         guard let jsonDataLoaded = data else { return }
-        
         
         if UserDefaults.standard.bool(forKey: "launchedBefore") == true {
 
@@ -94,6 +106,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let data = try? String(contentsOfFile: fileLocation).data(using: .utf8)
         return data
     }
+    
+    
     
     
 }

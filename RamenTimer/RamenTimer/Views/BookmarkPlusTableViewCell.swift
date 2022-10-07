@@ -9,7 +9,7 @@ import UIKit
 import CoreMedia
 
 protocol CellButtonActionDelegate: AnyObject {
-    func bookmarkButtonTapped()
+    func bookmarkButtonTapped(_ id: String)
 }
 
 
@@ -18,14 +18,13 @@ class BookmarkPlusTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     
-    var bookmarButtonAction: (() -> ())?
     var cellDelegate: CellButtonActionDelegate?
-    
+    var ramenID: String?
     
     lazy var bookmarkButton: UIButton = {
        let button = UIButton()
         button.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
-//        button.setImage(UIImage(systemName: "star.fill"), for: .selected)
+        button.tintColor = UIColor.systemYellow
         return button
         
     }()
@@ -35,6 +34,7 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         imageview.image = UIImage(systemName: ImageSystemNames.lineThreeHorizontal)
         imageview.scalesLargeContentImage = false
         imageview.contentMode = .scaleAspectFit
+        imageview.tintColor = UIColor.black
         return imageview
     }()
     
@@ -64,7 +64,6 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         label.text = "05:00"
         return label
     }()
-
 
     lazy var mainStackView: UIStackView = {
        let sv = UIStackView(arrangedSubviews: [bookmarkButton, ramenImage, SubStackView, lineImage])
@@ -120,16 +119,14 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-//    @objc func bookmarkButtonTapped() {
-//        bookmarButtonAction?()
-//
-//    }
+
     
     // MARK: - Actions
     
     @objc func bookmarkButtonTapped() {
-        cellDelegate?.bookmarkButtonTapped()
+        guard let ramenID = ramenID else { return }
+        cellDelegate?.bookmarkButtonTapped(ramenID)
+
         if bookmarkButton.image(for: .normal) == UIImage(systemName: ImageSystemNames.star) {
             bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.starFill), for: .normal)
         } else {
@@ -139,6 +136,39 @@ class BookmarkPlusTableViewCell: UITableViewCell {
     
     // MARK: - Helpers
     
+    func updateRamenCell(ramenData: RamenData, isDragInteractionEnabled: Bool) {
+        ramenID = ramenData.number
+        let ramenTitle = ramenData.title
+        self.ramenTitleLabel.text = ramenTitle
+        self.ramenImage.image = UIImage(named: ramenTitle ?? "")
+        setupTimerLabel(ramenData: ramenData)
+        ramenData.bookmark ? bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.starFill), for: .normal) : bookmarkButton.setImage(UIImage(systemName: ImageSystemNames.star), for: .normal)
+        lineImage.isHidden = isDragInteractionEnabled ? false : true
+        
+        }
+    
+    func setupTimerLabel(ramenData: RamenData) {
+            
+        guard let settingTimer = ramenData.settingTime,
+                  let intSettingTimer = Int(settingTimer) else { return }
+            let minutes: Int = intSettingTimer / 60
+            let seconds: Int = intSettingTimer - (minutes * 60)
+            let mins = minutes
+            let secs = seconds
+            
+            if mins == 0 && secs == 0 {
+                self.timeLabel.text = "00:00"
+            } else if secs < 10 && mins < 10 {
+                self.timeLabel.text = "0\(mins):0\(secs)"
+            } else if mins < 10 {
+                self.timeLabel.text = "0\(mins):\(secs)"
+            } else if mins == 10 && secs < 10 {
+                self.timeLabel.text = "\(mins):0\(secs)"
+            } else {
+                self.timeLabel.text = "\(mins):\(secs)"
+            }
+        }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -146,8 +176,6 @@ class BookmarkPlusTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
- 
     }
     
     func configureUI() {
@@ -174,8 +202,6 @@ class BookmarkPlusTableViewCell: UITableViewCell {
         
         bookmarkButton.setContentHuggingPriority(.init(rawValue: 251), for: .horizontal)
         
-        
-        
         NSLayoutConstraint.activate([
 //            mainStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
@@ -188,11 +214,11 @@ class BookmarkPlusTableViewCell: UITableViewCell {
             
             lineImage.widthAnchor.constraint(equalToConstant: 30),
 
-
-            
-            
         ])
     }
+    
+
+    
 
 }
 

@@ -9,8 +9,12 @@ import UIKit
 
 class BookmarkTimerCollectionViewCell: UICollectionViewCell {
     
-    let imageView = UIImageView()
-
+    let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     
     var isZoom = false //이미지 확대 여부를 나타내는bool타입변수
     
@@ -19,7 +23,7 @@ class BookmarkTimerCollectionViewCell: UICollectionViewCell {
             if isSelected {
                 imageView.contentMode = .center
             } else {
-                imageView.contentMode = .scaleAspectFit
+                imageView.contentMode = .scaleAspectFit            
             }
         }
     }
@@ -43,6 +47,7 @@ class BookmarkTimerCollectionViewCell: UICollectionViewCell {
             imageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0),
             imageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0),
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0)
+          
             ])
         }
     }

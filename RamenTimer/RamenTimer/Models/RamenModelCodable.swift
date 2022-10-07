@@ -19,6 +19,7 @@ struct RamenModelCodable: Codable {
     var brand: String?
     var spicyLevel: String?
     var color: String?
+    var order: Int16
     
 //    enum CodingKeys: String, CodingKey {
 //        case number = "number"

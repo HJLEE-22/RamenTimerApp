@@ -19,7 +19,7 @@ class RamenSearchVC: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         flowLayout.scrollDirection = .vertical
-        flowLayout.itemSize = CGSize(width: 130, height: 130)
+
         // 아이템 사이 간격 설정
         flowLayout.minimumInteritemSpacing = 0
         // 아이템 위아래 사이 간격 설정
@@ -42,6 +42,9 @@ class RamenSearchVC: UIViewController {
         self.navigationItem.searchController = searchController
         ramens = CoreDataManager.shared.getRamenListFromCoreData()
 //        print("search뷰", ramens)
+        let frameWidth = collectionView.frame.width
+        print("DEBUG: framewith \(frameWidth)")
+        
     }
         
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -213,14 +216,18 @@ extension RamenSearchVC: UICollectionViewDataSource {
                 if let title = cellModel.title {
                     cell.imageView.image = UIImage(named: "\(title)")
                 }
+            
             }
         
 
         return cell
     }
-    
-    
-    
-    
-    
+
+}
+
+extension RamenSearchVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let viewFrame = view.frame.width
+        return CGSize(width: viewFrame / 3, height: viewFrame / 3)
+    }
 }

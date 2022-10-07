@@ -10,7 +10,8 @@
         "memo" : "스프를 넣고 졸이면 좋다.",
         "brand" : "nongsim",
         "spicyLevel" : "0",
-        "color" : "green"
+        "color" : "green",
+        "order" : 0
     },
     {
         "number" : "2",
@@ -22,7 +23,9 @@
         "memo" : "치즈랑 좋다.",
         "brand" : "samyang",
         "spicyLevel" : "2",
-        "color" : "black"
+        "color" : "black",
+        "order" : 0
+
     },
     {
         "number" : "3",
@@ -34,7 +37,9 @@
         "memo" : "",
         "brand" : "samyang",
         "spicyLevel" : "2",
-        "color" : "pink"
+        "color" : "pink",
+        "order" : 0
+
     },
     {
         "number" : "4",
@@ -46,7 +51,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "1",
-        "color" : "red"
+        "color" : "red",
+        "order" : 0
+
     },
     {
         "number" : "5",
@@ -58,7 +65,9 @@
         "memo" : "순두부랑 좋다.",
         "brand" : "ottugi",
         "spicyLevel" : "2",
-        "color" : "red"
+        "color" : "red",
+        "order" : 0
+
     },
     {
         "number" : "6",
@@ -70,7 +79,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "0",
-        "color" : "black"
+        "color" : "black",
+        "order" : 0
+
     },
     {
         "number" : "7",
@@ -82,7 +93,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "0",
-        "color" : "blue"
+        "color" : "blue",
+        "order" : 0
+
     },
     {
         "number" : "8",
@@ -94,7 +107,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "1",
-        "color" : "red"
+        "color" : "red",
+        "order" : 0
+
     },
     {
         "number" : "9",
@@ -106,7 +121,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "0",
-        "color" : "green"
+        "color" : "green",
+        "order" : 0
+
     },
     {
         "number" : "10",
@@ -118,7 +135,9 @@
         "memo" : "",
         "brand" : "nongsim",
         "spicyLevel" : "1",
-        "color" : "red"
+        "color" : "red",
+        "order" : 0
+
     }
     
 ]

@@ -16,7 +16,7 @@ class RamenSearchCollectionViewCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                imageView.backgroundColor = .lightGray
+                imageView.backgroundColor = Colors.customlightGrey
             } else {
                 imageView.backgroundColor = .clear
             }

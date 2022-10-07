@@ -34,8 +34,10 @@ class CoreDataManager {
             // 정렬순서를 정해서 요청서에 넘겨주기
             //                let dateOrder = NSSortDescriptor(key: "date", ascending: false)
             //                request.sortDescriptors = [dateOrder]
-//            let numberOrder = NSSortDescriptor(key: "number", ascending: false)
-//            request.sortDescriptors = [numberOrder]
+
+            let orderSort = NSSortDescriptor(key: "order", ascending: true)
+            request.sortDescriptors = [orderSort]
+            
             
             do {
                 // 임시저장소에서 (요청서를 통해서) 데이터 가져오기 (fetch메서드)
@@ -61,21 +63,6 @@ class CoreDataManager {
                     if let ramenData = NSManagedObject(entity: entity, insertInto: context) as? RamenData {
                         
                         // MARK: - ToDoData에 실제 데이터 할당 ⭐️
-                       
-//                        ramens.forEach {
-//                            print($0.title!)
-//                            ramenData.number = $0.number
-//                            ramenData.title = $0.title
-//                            ramenData.bookmark = $0.bookmark
-//                            ramenData.brand = $0.brand
-//                            ramenData.memo = $0.memo
-//                            ramenData.water = $0.water
-//                            ramenData.settingTime = $0.settingTime
-//                            ramenData.spicyLevel = $0.spicyLevel
-//                            ramenData.suggestedTime = $0.suggestedTime
-//                            ramenData.color = $0.color
-//
-//                        }
                         
                         ramenData.number = ramens.number
                         ramenData.title = ramens.title
@@ -147,7 +134,8 @@ class CoreDataManager {
 
                             // MARK: - ToDoData에 실제 데이터 재할당(바꾸기) ⭐️
                             targetRamen = newRamenData
-
+                            let orderSort = NSSortDescriptor(key: "order", ascending: true)
+                            request.sortDescriptors = [orderSort]
                             appDelegate?.saveContext()
                         }
                     }

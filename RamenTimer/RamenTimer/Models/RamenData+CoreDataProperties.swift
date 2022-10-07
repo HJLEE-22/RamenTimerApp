@@ -26,6 +26,7 @@ extension RamenData {
     @NSManaged public var spicyLevel: String?
     @NSManaged public var brand: String?
     @NSManaged public var color: String?
+    @NSManaged public var order: Int16
 
 }
 

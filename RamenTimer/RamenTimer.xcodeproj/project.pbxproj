@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		AD33F9C128D04ED70001014E /* RamenModelCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C028D04ED70001014E /* RamenModelCodable.swift */; };
 		AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD33F9C228D177FC0001014E /* DataBaseContainer.swift */; };
+		AD3ACDA728EC42E8009B15C8 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3ACDA628EC42E8009B15C8 /* CustomTextField.swift */; };
+		AD3ACDA928EEA20F009B15C8 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3ACDA828EEA20F009B15C8 /* Colors.swift */; };
+		AD3ACDAF28EEB91C009B15C8 /* RamensList.json in Resources */ = {isa = PBXBuildFile; fileRef = AD3ACDAE28EEB91C009B15C8 /* RamensList.json */; };
 		ADB3835F28C0931B00D17272 /* BookmarkBasicBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */; };
 		ADB3836528C2208800D17272 /* alarm_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ADB3836428C2208800D17272 /* alarm_sound.mp3 */; };
 		ADB3836828C7353C00D17272 /* RamenData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */; };
 		ADB3836928C7353C00D17272 /* RamenData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */; };
 		ADB3836B28C735A000D17272 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836A28C735A000D17272 /* CoreDataManager.swift */; };
-		ADB3836D28C7708700D17272 /* RamenSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836C28C7708700D17272 /* RamenSearchView.swift */; };
 		ADB3836F28C770B600D17272 /* RamenSearchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3836E28C770B600D17272 /* RamenSearchCollectionViewCell.swift */; };
 		ADB3837128C770CC00D17272 /* RamenSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3837028C770CC00D17272 /* RamenSearchDetailView.swift */; };
 		ADB3837328C837FF00D17272 /* RamenSearchDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADB3837228C837FF00D17272 /* RamenSearchDetailVC.swift */; };
@@ -33,17 +35,21 @@
 		ADCE5F8A28B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F8928B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift */; };
 		ADCE5F9028BDA54400A42575 /* BookmarkPlusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F8F28BDA54400A42575 /* BookmarkPlusVC.swift */; };
 		ADCE5F9228BDA62400A42575 /* BookmarkPlusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCE5F9128BDA62400A42575 /* BookmarkPlusTableViewCell.swift */; };
+		D7EB86529518EA4FD3D58380 /* Pods_RamenTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F30A27BFE9122733D9D32AB /* Pods_RamenTimer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F30A27BFE9122733D9D32AB /* Pods_RamenTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RamenTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD33F9C028D04ED70001014E /* RamenModelCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenModelCodable.swift; sourceTree = "<group>"; };
 		AD33F9C228D177FC0001014E /* DataBaseContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseContainer.swift; sourceTree = "<group>"; };
+		AD3ACDA628EC42E8009B15C8 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		AD3ACDA828EEA20F009B15C8 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		AD3ACDAE28EEB91C009B15C8 /* RamensList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = RamensList.json; sourceTree = "<group>"; };
 		ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkBasicBackgroundView.swift; sourceTree = "<group>"; };
 		ADB3836428C2208800D17272 /* alarm_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm_sound.mp3; sourceTree = "<group>"; };
 		ADB3836628C7353C00D17272 /* RamenData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RamenData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		ADB3836728C7353C00D17272 /* RamenData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RamenData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		ADB3836A28C735A000D17272 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		ADB3836C28C7708700D17272 /* RamenSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchView.swift; sourceTree = "<group>"; };
 		ADB3836E28C770B600D17272 /* RamenSearchCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchCollectionViewCell.swift; sourceTree = "<group>"; };
 		ADB3837028C770CC00D17272 /* RamenSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchDetailView.swift; sourceTree = "<group>"; };
 		ADB3837228C837FF00D17272 /* RamenSearchDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamenSearchDetailVC.swift; sourceTree = "<group>"; };
@@ -64,6 +70,8 @@
 		ADCE5F8928B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTimerCollectionViewCell.swift; sourceTree = "<group>"; };
 		ADCE5F8F28BDA54400A42575 /* BookmarkPlusVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPlusVC.swift; sourceTree = "<group>"; };
 		ADCE5F9128BDA62400A42575 /* BookmarkPlusTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPlusTableViewCell.swift; sourceTree = "<group>"; };
+		B393CA7D0903D930112566B3 /* Pods-RamenTimer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RamenTimer.release.xcconfig"; path = "Target Support Files/Pods-RamenTimer/Pods-RamenTimer.release.xcconfig"; sourceTree = "<group>"; };
+		C41C4BBB8425E6B35C635530 /* Pods-RamenTimer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RamenTimer.debug.xcconfig"; path = "Target Support Files/Pods-RamenTimer/Pods-RamenTimer.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,16 +79,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7EB86529518EA4FD3D58380 /* Pods_RamenTimer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EAF1EB734F6FCBD08EF0F78 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4F30A27BFE9122733D9D32AB /* Pods_RamenTimer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A8CD8D2DF24AD86598B5C7DA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C41C4BBB8425E6B35C635530 /* Pods-RamenTimer.debug.xcconfig */,
+				B393CA7D0903D930112566B3 /* Pods-RamenTimer.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		ADBEDA2528DEF5E5000895A9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				ADB3837428C8BC3900D17272 /* Ramens.json */,
+				AD3ACDAE28EEB91C009B15C8 /* RamensList.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -90,6 +117,8 @@
 			children = (
 				ADCE5F6328B9C76300A42575 /* RamenTimer */,
 				ADCE5F6228B9C76300A42575 /* Products */,
+				A8CD8D2DF24AD86598B5C7DA /* Pods */,
+				2EAF1EB734F6FCBD08EF0F78 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,9 +169,9 @@
 				ADCE5F8928B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift */,
 				ADCE5F9128BDA62400A42575 /* BookmarkPlusTableViewCell.swift */,
 				ADB3835E28C0931B00D17272 /* BookmarkBasicBackgroundView.swift */,
-				ADB3836C28C7708700D17272 /* RamenSearchView.swift */,
 				ADB3836E28C770B600D17272 /* RamenSearchCollectionViewCell.swift */,
 				ADB3837028C770CC00D17272 /* RamenSearchDetailView.swift */,
+				AD3ACDA628EC42E8009B15C8 /* CustomTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				ADCE5F8728B9E23800A42575 /* Constants.swift */,
+				AD3ACDA828EEA20F009B15C8 /* Colors.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -174,9 +204,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ADCE5F7828B9C76500A42575 /* Build configuration list for PBXNativeTarget "RamenTimer" */;
 			buildPhases = (
+				6C562CE5ED2ECE83915EA2E5 /* [CP] Check Pods Manifest.lock */,
 				ADCE5F5D28B9C76300A42575 /* Sources */,
 				ADCE5F5E28B9C76300A42575 /* Frameworks */,
 				ADCE5F5F28B9C76300A42575 /* Resources */,
+				3CA2BE780054054C38114E72 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -230,10 +262,53 @@
 				ADCE5F7128B9C76500A42575 /* Assets.xcassets in Resources */,
 				ADB3836528C2208800D17272 /* alarm_sound.mp3 in Resources */,
 				ADCE5F6C28B9C76300A42575 /* Main.storyboard in Resources */,
+				AD3ACDAF28EEB91C009B15C8 /* RamensList.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3CA2BE780054054C38114E72 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RamenTimer/Pods-RamenTimer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RamenTimer/Pods-RamenTimer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RamenTimer/Pods-RamenTimer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6C562CE5ED2ECE83915EA2E5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RamenTimer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		ADCE5F5D28B9C76300A42575 /* Sources */ = {
@@ -241,9 +316,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ADCE5F6928B9C76300A42575 /* BookmarkVC.swift in Sources */,
+				AD3ACDA928EEA20F009B15C8 /* Colors.swift in Sources */,
 				ADCE5F7F28B9D93700A42575 /* RamenSearchVC.swift in Sources */,
 				ADB3836B28C735A000D17272 /* CoreDataManager.swift in Sources */,
-				ADB3836D28C7708700D17272 /* RamenSearchView.swift in Sources */,
 				ADCE5F9028BDA54400A42575 /* BookmarkPlusVC.swift in Sources */,
 				AD33F9C128D04ED70001014E /* RamenModelCodable.swift in Sources */,
 				AD33F9C328D177FC0001014E /* DataBaseContainer.swift in Sources */,
@@ -252,6 +327,7 @@
 				ADCE5F8328B9DA4C00A42575 /* BookmarkTimerView.swift in Sources */,
 				ADCE5F8128B9D9AD00A42575 /* RandomVC.swift in Sources */,
 				ADB3837328C837FF00D17272 /* RamenSearchDetailVC.swift in Sources */,
+				AD3ACDA728EC42E8009B15C8 /* CustomTextField.swift in Sources */,
 				ADCE5F6728B9C76300A42575 /* SceneDelegate.swift in Sources */,
 				ADB3836F28C770B600D17272 /* RamenSearchCollectionViewCell.swift in Sources */,
 				ADCE5F8A28B9E66400A42575 /* BookmarkTimerCollectionViewCell.swift in Sources */,
@@ -402,6 +478,7 @@
 		};
 		ADCE5F7928B9C76500A42575 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C41C4BBB8425E6B35C635530 /* Pods-RamenTimer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -413,6 +490,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -431,6 +509,7 @@
 		};
 		ADCE5F7A28B9C76500A42575 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B393CA7D0903D930112566B3 /* Pods-RamenTimer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -442,6 +521,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

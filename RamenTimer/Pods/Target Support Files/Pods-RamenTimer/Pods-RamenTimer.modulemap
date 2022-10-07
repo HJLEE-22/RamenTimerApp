@@ -1,0 +1,6 @@
+framework module Pods_RamenTimer {
+  umbrella header "Pods-RamenTimer-umbrella.h"
+
+  export *
+  module * { export * }
+}

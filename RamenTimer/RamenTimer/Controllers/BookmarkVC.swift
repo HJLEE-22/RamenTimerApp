@@ -13,30 +13,20 @@ class BookmarkVC: UIViewController {
 
     // MARK: - coredata property
     
+    var originViewFrameY : CGFloat?
+    
     var ramens:[RamenData]?
     
     var ramen: RamenData?
     
     var bookmarkedRamens: [RamenData]? {
         didSet {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.collectionView.reloadData()
-            }
+//            reloadCollectionView()
         }
     }
     
-//    func reloadCollectionView() {
-//        DispatchQueue.main.async {
-//         self.collectionView.reloadData()
-//        }
-//    }
+    var selectedIndexPath: IndexPath?
 
-//    override func didReceiveMemoryWarning() {
-//         super.didReceiveMemoryWarning()
-//         // Dispose of any resources that can be recreated.
-//     }
-    
 // MARK: - 기본 인스턴스들
     
     private var collectionView: UICollectionView = {
@@ -46,7 +36,7 @@ class BookmarkVC: UIViewController {
 //        let collectionCellWidth = 120
         flowLayout.itemSize = CGSize(width: 170, height: 170)
         // 아이템 사이 간격 설정
-        flowLayout.minimumInteritemSpacing = 0
+        flowLayout.minimumInteritemSpacing = 10
         // 아이템 위아래 사이 간격 설정
         flowLayout.minimumLineSpacing = 0
         
@@ -92,12 +82,11 @@ class BookmarkVC: UIViewController {
         setupCollectionView()
         setupCollectionViewConstraints()
         setupPlayButton()
-        setupScrollView()
         setupBackgroundView()
         bookmarkTimerView.clearTextField.delegate = self
-        ramens = CoreDataManager.shared.getRamenListFromCoreData()
-        self.collectionView.reloadData()
-        print("DEBUG: 북마크된 라면들 \(bookmarkedRamens)")
+        reloadCollectionView()
+
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -106,14 +95,26 @@ class BookmarkVC: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        self.addKeyboardNotifications()
-        bookmarkedRamens = ramens?.filter( { $0.bookmark == true })
+        bookmarkedRamens = updateBookmarkedRamenArray().filter( { $0.bookmark == true })
+        reloadCollectionView()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.removeKeyboardNotifications()
+//        self.removeKeyboardNotifications()
     }
 
+    func reloadCollectionView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func updateBookmarkedRamenArray() -> [RamenData]{
+        CoreDataManager.shared.getRamenListFromCoreData()
+    }
+    
     
 // MARK: - 셋업 함수들
     // MARK: - 네비게이션 셋업
@@ -139,8 +140,7 @@ class BookmarkVC: UIViewController {
     @objc func plusButtonTapped() {
         let bookmarkPlusVC = BookmarkPlusVC()
         show(bookmarkPlusVC, sender: nil)
-//      //이전방식
-//        navigationController?.pushViewController(bookmarkPlusVC, animated: true)
+
         
     }
     
@@ -208,9 +208,7 @@ class BookmarkVC: UIViewController {
     
     
     // MARK: - 카운트다운 레이블 셋업
-    // 카운트 하기전에 우선 보여주기
     func setupTimerLabel(indexPath: IndexPath) {
-        
         
         if let bookmarkedRamens = self.bookmarkedRamens {
             let cellModel = bookmarkedRamens[indexPath.row]
@@ -273,13 +271,16 @@ class BookmarkVC: UIViewController {
     
     // 스타트버튼을 누르면 실행하는 함수 + 일시정지
     @objc func playButtonTapped() {
-        if bookmarkTimerView.playButton.image(for: .normal) == UIImage(systemName: "play.fill") {
+        if bookmarkTimerView.playButton.image(for: .normal) == UIImage(systemName: ImageSystemNames.play) {
             timer?.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countingTimer), userInfo: nil, repeats: true)
             bookmarkTimerView.playButton.setImage(UIImage(systemName: ImageSystemNames.pause), for: .normal)
+            self.bookmarkTimerView.clearTextField.isEnabled = false
         } else {
             timer?.invalidate()
             bookmarkTimerView.playButton.setImage(UIImage(systemName: ImageSystemNames.play), for: .normal)
+            self.bookmarkTimerView.clearTextField.isEnabled = true
+
         }
     }
     
@@ -368,6 +369,7 @@ class BookmarkVC: UIViewController {
     }
     
     @objc func saveMemoTapped() {
+        self.view.endEditing(true)
         if bookmarkTimerView.memoTextView.text == TextViewPlaceholder.PleaseWrite {
             return
         } else if bookmarkTimerView.memoTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -408,6 +410,8 @@ class BookmarkVC: UIViewController {
         }
     }
     // MARK: - (텍스트뷰를 위한) 스크롤뷰 셋업
+    
+    /*
     // 스크롤뷰에서 터치로 키보드 resign하기 위한 함수
     func setupScrollView() {
         let singleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(myTapMethod))
@@ -420,6 +424,7 @@ class BookmarkVC: UIViewController {
     @objc func myTapMethod(sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
+     */
     
     // MARK: - 타이머화면 등장 애니메이션
     func setupBookmarkTimerViewAnimation() {
@@ -434,63 +439,10 @@ class BookmarkVC: UIViewController {
         }
     }
     
-    // MARK: - 키보드 화면 애니메이션
-    
-//    var viewYValue = CGFloat(0)
-    
-    func addKeyboardNotifications(){
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification , object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    func removeKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-//    @objc func keyboardWillShow(_ noti: NSNotification){
-//        if let keyboardSize = (noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            if viewYValue == 0 {
-//                viewYValue = self.view.frame.origin.y
-//            }
-//            if self.view.frame.origin.y == viewYValue {
-//                viewYValue = self.view.frame.origin.y
-//                self.view.frame.origin.y -= keyboardSize.height-UIApplication.shared.windows.first!.safeAreaInsets.bottom
-//            }
-//
-//        }
-//
-//    }
-//
-//    @objc func keyboardWillHide(_ noti: NSNotification) {
-//        if self.view.frame.origin.y != viewYValue {
-//            self.view.frame.origin.y = viewYValue
-//        }
-//
-//    }
-    
-    
-    @objc func keyboardWillShow(_ noti: NSNotification){
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-
-
-            self.view.frame.origin.y -= (keyboardHeight)
-        }
-    }
-
-    @objc func keyboardWillHide(_ noti: NSNotification) {
-        if let keyboardFrame: NSValue = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            self.view.frame.origin.y += (keyboardHeight)
-        }
-
-    }
-    
     // MARK: - pickerView 설정
     func showPickerView(indexPath: IndexPath) {
+        
+        
         let pickerView = UIPickerView()
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -507,32 +459,58 @@ class BookmarkVC: UIViewController {
         bookmarkTimerView.clearTextField.inputView = pickerView
         bookmarkTimerView.clearTextField.inputAccessoryView = toolBar
 
+        
     }
     
     @objc func onPickDone(_ sender: UIBarButtonItem) {
-        /// 확인 눌렀을 때 액션 정의
-
-
+        
         let timeToString = String((componentMin * 60) + componentSec)
         guard let ramen = self.ramen else { return print("DEBUG: ramen 없음") }
         ramen.settingTime = timeToString
+        
+        
         CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
-            print("DEBUG: 피커뷰로 시간 바뀐 \(ramen)")
             
             let alert = UIAlertController(title: "시간 변경", message: "타이머 시간이 변경되었습니다.", preferredStyle: .alert)
             let check = UIAlertAction(title: "OK", style: .default) { _ in
                 // 피커뷰 종료 -> dismiss 대신 endEditing으로
+                self.bookmarkedRamens = self.updateBookmarkedRamenArray().filter( { $0.bookmark == true })
                 self.view.endEditing(true)
+                guard let selectedIndexPath = self.selectedIndexPath else { return }
+
+                self.setupTimerLabel(indexPath: selectedIndexPath)
+                self.setupTimeSlider(indexPath: selectedIndexPath)
+                self.setupTimerTextView(indexPath: selectedIndexPath)
+
             }
             alert.addAction(check)
-            self.present(alert, animated: true)
+            self.present(alert, animated: true) { () in
+                
+            }
         })
-        
+         /*
+        let alert = UIAlertController(title: "시간 변경", message: "타이머 시간이 변경되었습니다.", preferredStyle: .alert)
+        let check = UIAlertAction(title: "OK", style: .default) { _ in
+            // 피커뷰 종료 -> dismiss 대신 endEditing으로
+
+            self.view.endEditing(true)
+//                self.bookmarkTimerView.setNeedsLayout()
+//                self.bookmarkTimerView.layoutIfNeeded()
+        }
+        alert.addAction(check)
+        self.present(alert, animated: true) { () in
+            CoreDataManager.shared.updateRamenData(newRamenData: ramen, completion: {
+                self.bookmarkedRamens = self.updateBookmarkedRamenArray().filter( { $0.bookmark == true })
+
+            })
+
+        }
+          */
+
         bookmarkTimerView.clearTextField.resignFirstResponder()
 
     }
          
-    // 피커뷰 > 취소 클릭
     @objc func onPickCancel() {
 
         bookmarkTimerView.clearTextField.resignFirstResponder()
@@ -559,6 +537,7 @@ extension BookmarkVC: UICollectionViewDelegate {
         setupBookmarkTimerViewAnimation()
         showPickerView(indexPath: indexPath)
         setupSaveButton()
+        self.selectedIndexPath = indexPath
 
     }
 }
@@ -577,8 +556,8 @@ extension BookmarkVC: UICollectionViewDataSource {
             if let title = cellModel.title {
                 cell.imageView.image = UIImage(named: "\(title)")
             }
+            
         }
-    
         return cell
     }
 }
@@ -600,10 +579,7 @@ extension BookmarkVC: UITextViewDelegate {
             textView.textColor = .lightGray
             textView.resignFirstResponder()
         }
-        
     }
-    
-    
 }
 
 // MARK: - pickerView 익스텐션
@@ -648,13 +624,18 @@ extension BookmarkVC: UIPickerViewDataSource, UIPickerViewDelegate {
         }
         calculateMinsAndSecs(mins: componentMin, secs: componentSec)
     }
-    
 }
 
 
     
 extension BookmarkVC: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+
+    }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+    }
 }
     
 
