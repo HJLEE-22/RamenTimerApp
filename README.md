@@ -4,6 +4,9 @@ CoreData를 이용한 라면 타이머 앱
 
 [https://apps.apple.com/kr/app/ramentimer/id6443728621](https://apps.apple.com/kr/app/ramentimer/id6443728621)
 
+![ezgif com-gif-maker-2](https://user-images.githubusercontent.com/98086074/214858682-0e07d5f5-56ce-4964-a9f0-442ee5245ee1.png)
+
+
 ### 프로젝트 소개
 
 - 인스턴스 라면의 타이머 앱입니다.
@@ -22,7 +25,11 @@ CoreData를 이용한 라면 타이머 앱
 
 - 각 라면마다 권장 제조시간 및 물의 양과 같은 정보가 CoreData에 저장됩니다.
 - CollectionView와 TableView를 사용하여 라면을 검색하고,  즐겨찾기하며 순서 이동 등 관리가 가능합니다.
-- 나만의 제조 방법을 기록하고 저장할 수 있습니다.
+![AddRamenRecord](https://user-images.githubusercontent.com/98086074/214858088-2ce2e33e-a05f-44c0-9d33-77538a93c730.gif)
+
+- 나만의 제조 방법을 기록하고 저장할 수 있습니다.<br>
+![AddMemoRecord](https://user-images.githubusercontent.com/98086074/214858146-3267cf7a-b5fd-4c74-bf54-dd4321d177d0.gif)
+
 
 ### 주요 문제해결 과정
 
